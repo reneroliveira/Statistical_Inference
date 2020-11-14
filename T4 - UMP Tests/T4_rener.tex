@@ -1,0 +1,86 @@
+\documentclass[a4paper,10pt, notitlepage]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage[portuguese]{babel}
+
+
+\setlength{\parindent}{0em}
+\newcommand{\indep}{\perp \!\!\! \perp} %% indepence
+\newcommand{\pr}{\operatorname{Pr}} %% probability
+\newcommand{\vr}{\operatorname{Var}} %% variance
+\newcommand{\rs}{X_1, X_2, \ldots, X_n} %%  random sample
+\newcommand{\irs}{X_1, X_2, \ldots} %% infinite random sample
+\newcommand{\rsd}{x_1, x_2, \ldots, x_n} %%  random sample, realised
+\newcommand{\Sm}{\bar{X}_n} %%  sample mean, random variable
+\newcommand{\sm}{\bar{x}_n} %%  sample mean, realised
+\newcommand{\Sv}{\bar{S}^2_n} %%  sample variance, random variable
+\newcommand{\sv}{\bar{s}^2_n} %%  sample variance, realised
+\newcommand{\bX}{\boldsymbol{X}} %%  random sample, contracted form (bold)
+\newcommand{\bx}{\boldsymbol{x}} %%  random sample, realised, contracted form (bold)
+\newcommand{\bT}{\boldsymbol{T}} %%  Statistic, vector form (bold)
+\newcommand{\bt}{\boldsymbol{t}} %%  Statistic, realised, vector form (bold)
+\newcommand{\emv}{\hat{\theta}_{\text{EMV}}}
+\newcommand{\defn}{\stackrel{\textrm{\scriptsize def}}{=}}
+\newcommand{\mysection}[2]{\setcounter{section}{#1}\addtocounter{section}{-1}\section*{#1 #2}}
+\newcommand{\op}{\operatorname}
+
+% Title Page
+\title{Trabalho IV: Testes uniformemente mais poderosos.}
+\author{Disciplina: Inferência Estatística \\ Aluno: Rener de Souza Oliveira}
+
+\begin{document}
+	\maketitle
+
+	
+	\section{Introdução}
+	
+	Vimos que os testes de hipótese fornecem uma abordagem matematicamente sólida para traduzir hipóteses científicas sobre o processo gerador dos dados em decisões sobre os dados -- isto é, traduzir afirmações sobre particões do espaço de parâmetros, $\Omega$, em afirmações testáveis sobre o espaço amostral $\mathcal{X}^n$.
+	
+	Um teste $\delta(\bX)$ é uma decisão (binária) de rejeitar ou não uma hipótese nula ($H_0$) sobre $\theta \in \Omega$ com base em uma amostra $\bX$.
+	A capacidade de um teste de rejeitar $H_0$ quando ela é falsa é medida pela função poder, $\pi(\theta |\delta)$.
+	Nem todos os testes, no entanto, são criados iguais.
+	Em certas situações, é possível mostrar que um procedimento $\delta_A$ é~\textit{uniformemente} mais poderoso que outro procedimento $\delta_B$ para testar a mesma hipótese.
+	
+	Neste trabalho, vamos definir e aplicar o conceito de~\textbf{teste uniformemente mais poderoso}.
+	
+	\mysection{1}{Motivação e Definição}
+	
+	Sejam:
+	
+	\begin{align}
+	\label{h0h1}
+	 H_0:& \theta \in \Omega_0\subset \Omega,\nonumber\\
+	 H_1:& \theta \in \Omega_1\subset \Omega,\nonumber\\
+	\end{align}
+	
+	%De tal forma que $H_1$ seja composta, ou seja, possui cardinalidade maior que 1.
+	
+	Ao realizar um procedimento de teste $\delta(\bX)$, é desejável que a função poder $\pi(\theta|\delta):\defn \op{Pr}(Rejeitar ~H_0|\theta)$ seja menor ou igual à um nível de significância $\alpha_0\in (0,1)$, quando $\theta\in\Omega_0$, limitando superiormente a probabilidade de erro do tipo I (rejeitar $H_0$ quando ela é verdadeira). Podemos expressar tal propriedade da seguinte forma:
+	
+	\begin{align*}
+		\alpha(\delta)\leq \alpha_0
+	\end{align*}
+	
+	Onde $\displaystyle\alpha(\delta):\defn\sup_{\theta\in\Omega_0}\pi(\theta|\delta)$ é o tamanho do teste.
+	
+	
+	
+	Além disso, queremos também ter algum controle sobre a probabilidade de erro do tipo II (não rejeitar $H_0$ quando ela é falsa). Como a probabilidade de tal erro quando $\theta \in \Omega_1$ é igual a $1-\pi(\theta|\delta)$, queremos que, na região onde $H_0$ é falsa ($\Omega_1$) a função poder $\pi(\theta|\delta)$ seja máxima, para todo $\theta$ em tal região. Tal maximização, minimiza a probabilidade de erro do tipo II quando $\theta\in\Omega_1$, isso nem sempre é possível, mas quando for, temos um nome especial para esse teste, que segue abaixo sua definição:
+	
+	(Teste Uniformemente mais poderoso) Um procedimento de teste $\delta^*$ para as hipóteses (\ref{h0h1}) é chamado de uniformemente mais poderoso com nível de significância $\alpha_0$ se:
+	
+	\begin{align*}
+	\alpha(\delta^*)&\leq \alpha_0~\text{e}\\\pi(\theta|\delta^*)&\geq\pi(\theta|\delta) ~\forall \,\theta \in \Omega_1
+	\end{align*}
+	
+	para qualquer teste $\delta$ tal que $\alpha(\delta)\leq \alpha_0$.
+	
+	
+	
+	% \bibliographystyle{apalike}
+	% \bibliography{refs}
+	
+\end{document}        
