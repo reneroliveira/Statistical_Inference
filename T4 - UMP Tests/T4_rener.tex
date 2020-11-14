@@ -6,7 +6,7 @@
 \usepackage{enumitem}
 \usepackage[portuguese]{babel}
 
-
+\newtheorem{defi}{Definicão}
 \setlength{\parindent}{0em}
 \newcommand{\indep}{\perp \!\!\! \perp} %% indepence
 \newcommand{\pr}{\operatorname{Pr}} %% probability
@@ -35,9 +35,9 @@
 	\maketitle
 
 	
-	\section{Introdução}
+	\section*{Introdução}
 	
-	Vimos que os testes de hipótese fornecem uma abordagem matematicamente sólida para traduzir hipóteses científicas sobre o processo gerador dos dados em decisões sobre os dados -- isto é, traduzir afirmações sobre particões do espaço de parâmetros, $\Omega$, em afirmações testáveis sobre o espaço amostral $\mathcal{X}^n$.
+	Vimos que os testes de hipótese fornecem uma abordagem matematicamente sólida para traduzir hipóteses científicas sobre o processo gerador dos dados em decisões sobre os dados -- isto é, traduzir afirmações sobre partições do espaço de parâmetros, $\Omega$, em afirmações testáveis sobre o espaço amostral $\mathcal{X}^n$.
 	
 	Um teste $\delta(\bX)$ é uma decisão (binária) de rejeitar ou não uma hipótese nula ($H_0$) sobre $\theta \in \Omega$ com base em uma amostra $\bX$.
 	A capacidade de um teste de rejeitar $H_0$ quando ela é falsa é medida pela função poder, $\pi(\theta |\delta)$.
@@ -53,7 +53,8 @@
 	\begin{align}
 	\label{h0h1}
 	 H_0:& \theta \in \Omega_0\subset \Omega,\nonumber\\
-	 H_1:& \theta \in \Omega_1\subset \Omega,\nonumber\\
+	 H_1:& \theta \in \Omega_1\subset \Omega,\\
+	 \text{onde } &\Omega_1= \Omega \setminus \Omega_0\nonumber
 	\end{align}
 	
 	%De tal forma que $H_1$ seja composta, ou seja, possui cardinalidade maior que 1.
@@ -70,13 +71,20 @@
 	
 	Além disso, queremos também ter algum controle sobre a probabilidade de erro do tipo II (não rejeitar $H_0$ quando ela é falsa). Como a probabilidade de tal erro quando $\theta \in \Omega_1$ é igual a $1-\pi(\theta|\delta)$, queremos que, na região onde $H_0$ é falsa ($\Omega_1$) a função poder $\pi(\theta|\delta)$ seja máxima, para todo $\theta$ em tal região. Tal maximização, minimiza a probabilidade de erro do tipo II quando $\theta\in\Omega_1$, isso nem sempre é possível, mas quando for, temos um nome especial para esse teste, que segue abaixo sua definição:
 	
-	(Teste Uniformemente mais poderoso) Um procedimento de teste $\delta^*$ para as hipóteses (\ref{h0h1}) é chamado de uniformemente mais poderoso com nível de significância $\alpha_0$ se:
+	\begin{defi}
+		\textbf{(Teste Uniformemente mais poderoso)}
+		\label{ump} 
+		Seja $\mathcal{C}$ uma classe de teste para as hipóteses (\ref{h0h1}); $\delta^*\in\mathcal{C}$ é chamado de uniformemente mais poderoso da classe $\mathcal{C}$, se:
+		
+		\begin{align*}\pi(\theta|\delta^*)&\geq\pi(\theta|\delta) ~\forall \,\theta \in \Omega_1,
+		\end{align*}
+		
+		para qualquer teste $\delta\in\mathcal{C}$.
+		
+	\end{defi} 
+	Seguindo a motivação dada acima, podemos definir $\mathcal{C}$ como o conjunto de todos dos testes de tamanho menor ou igual a $\alpha_0$, limitando o erro tipo I.
 	
-	\begin{align*}
-	\alpha(\delta^*)&\leq \alpha_0~\text{e}\\\pi(\theta|\delta^*)&\geq\pi(\theta|\delta) ~\forall \,\theta \in \Omega_1
-	\end{align*}
-	
-	para qualquer teste $\delta$ tal que $\alpha(\delta)\leq \alpha_0$.
+	\mysection{2}{Razão de Verossimilhanças Monótona}
 	
 	
 	
