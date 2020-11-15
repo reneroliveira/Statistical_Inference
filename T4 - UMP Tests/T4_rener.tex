@@ -5,6 +5,9 @@
 \usepackage{amsmath}
 \usepackage{enumitem}
 \usepackage[portuguese]{babel}
+\usepackage{amsmath}%
+\usepackage{MnSymbol}%
+%\usepackage{wasysym}%
 
 \newtheorem{defi}{Definicão}
 \newtheorem{teo}{Teorema}
@@ -134,7 +137,7 @@
 		
 		\begin{align}
 		\label{np1}
-			\bx\in R\text{ se } f(\bx|\theta_1)\gt kf(\bx|\theta_0)\nonumber\\ \\\text{ e }\bx\in R^C\text{ se } f(\bx|\theta_1)<k f(\bx|\theta_0),\nonumber
+			\bx\in R\text{ se } f(\bx|\theta_1)\geq kf(\bx|\theta_0)\nonumber\\ \\\text{ e }\bx\in R^C\text{ se } f(\bx|\theta_1)\leq k f(\bx|\theta_0),\nonumber
 		\end{align}
 		
 		para algum $k\geq0$ e 
@@ -144,19 +147,20 @@
 			\pr(\bX\in R|\theta = \theta_0)=\alpha_0.
 		\end{align}
 		
-		Então, todo teste que satisfaz (\ref{np1}) e (\ref{np1}) é UMP ao nivel $\alpha_0$.
+		Então, todo teste que satisfaz (\ref{np1}) e (\ref{np2}) é UMP ao nivel $\alpha_0$.
 	\end{teo}
 
 	A demostração será omitida pois pode ser encontrada em (citar casella).
 	
 	\begin{col}
-		Considere as hipóteses (\ref{hnp}). Seja $T(\bX)$ uma estatística suficiente para $\theta$ e $g(t|\theta_i)$ a distribuição de $T$ dado $\theta_i,\,i=0,1$.
+		\label{colnp}
+		Considere as hipóteses (\ref{hnp}). Seja $T(\bX)$ uma estatística suficiente para $\theta$ e $g(t|\theta_i)\,i=0,1$, uma função de $t=T(\bx)$ tal que fatoriza a verossimilhança dos dados em $f_n(\bx|\theta_i)=g(t|\theta_i)u(\bx)$, para alguma função $u(\bx)\geq0$.
 		
 		Seja $\delta$ um teste que rejeite $H_0$ se $T$ pertence a uma região de rejeição $S$ (subconjunto do espaço de definição de $T$). Assim, $\delta$ será UMP ao nível $\alpha_0$ se satisfazer:
 		
 		\begin{align}
 		\label{col1}
-		 g(t|\theta_1)\gt kg(t|\theta_0)\implies t\in S\nonumber\\ \\\text{ e }g(t|\theta_1)< kg(t|\theta_0)\implies t\in S\pow C,\nonumber
+		 g(t|\theta_1)\geq  kg(t|\theta_0)\implies t\in S\nonumber\\ \\\text{ e }g(t|\theta_1)\leq kg(t|\theta_0)\implies t\in S\pow C,\nonumber
 		\end{align}
 		
 		para algum $k\geq0$ e 
@@ -172,15 +176,15 @@
 	Multiplicando tal função nas desigualdades (\ref{col1}) temos:
 	
 	\begin{align*}
-		&g(T(\bx)|\theta_1)\gt kg(T(\bx)|\theta_0)\\
+		&g(T(\bx)|\theta_1)\geq kg(T(\bx)|\theta_0)\\
 		\Leftrightarrow&
-		g(T(\bx)|\theta_1)u(\bx)\gt kg(T(\bx)|\theta_0)u(\bx)\\
-		\Leftrightarrow&f_n(\bx|\theta_1)\gt kf_n(\bx|\theta_0)
+		g(T(\bx)|\theta_1)u(\bx)\geq kg(T(\bx)|\theta_0)u(\bx)\\
+		\Leftrightarrow&f_n(\bx|\theta_1)\geq kf_n(\bx|\theta_0)
 	\end{align*}
 	
-	Assim, tem-se: $f_n(\bx|\theta_1)\gt kf_n(\bx|\theta_0)\implies T(\bx)\in S\implies \bx \in R$.
+	Assim, tem-se: $f_n(\bx|\theta_1)\geq kf_n(\bx|\theta_0)\implies T(\bx)\in S\implies \bx \in R$.
 	
-	Analogamente, $f_n(\bx|\theta_1)< kf_n(\bx|\theta_0)\implies \bx \in R\pow C$.
+	Analogamente, $f_n(\bx|\theta_1)\leq kf_n(\bx|\theta_0)\implies \bx \in R\pow C$.
 	
 	
 	De (\ref{col2}), tem-se:
@@ -190,6 +194,41 @@
 	\end{align*}
 	
 	Pelo \textbf{Lema de Neyman-Pearson} concluímos que o teste $\delta$ é UMP ao nível $\alpha_0$.
+	
+	
+	Voltando agora ao problema inicial da seção, queremos provar que $\delta\pow*$ é UMP ao nível $\alpha_0$ para $H_0:\theta=\theta_0$.
+	
+	Primeiramente precisamos provar que $\alpha(\delta\pow*)=\alpha_0$.
+	
+	\begin{align*}
+	\displaystyle\alpha(\delta\pow*)&=\sup_{\theta\in\Omega_0}\pi(\theta|\delta\pow*)\\
+	&=\sup_{\theta\in\Omega_0}\pr[r(\bX)\geq c|\theta]
+	\end{align*}
+	
+	Como $\Omega_0=\{\theta_0\}$, o supremo ocorre em $\theta_0$ o que implica que $\alpha(\delta\pow*)=\alpha_0$.
+	
+	Agora precisamos provar que $\delta\pow*$ é UMP.
+	
+	Façamos $\theta'$ arbitrário, com $\theta'\neq \theta_0$, testaremos $H_0:\theta=\theta_0$ contra $H_1':\theta=\theta'$.  No problema em questão, vale o \textbf{Teorema da Fatorização} para $r(\bX)$, logo assumindo sua suficiência, temos que a verossimilhança pode ser escrita como $f_n(\bx|\theta)=g(r(\bx)|\theta)u(\bx)$, para alguma função $u(\bx)\geq0$.
+	
+	Seja $t=r(\bx)$; Definamos:
+	
+	\begin{align*}
+		k=\inf_{t\in\mathcal{T}}\dfrac{f_n(\bx|\theta')}{f_n(\bx|\theta_0)}=\dfrac{g(t|\theta')}{g(t|\theta_0)}
+	\end{align*}
+	
+	Com $\mathcal{T}:\defn\{t|t\geq c\}$
+	
+	Tal ínfimo existe, pois pelo Teorema da Fatorização, a função $g$ é não-negativa, logo, o conjunto na qual estamos tomando ínfimo é limitado inferiormente por 0. Pelo análogo do Axioma do Supremo para ínfimos, $k$ está bem definido.
+	
+	Pela definição de ínfimo segue que:
+	
+	$r(\bx)\geq c\Leftrightarrow \dfrac{g(r(\bx)|\theta')}{g(r(\bx)|\theta_0)}\geq k$.
+	
+	Pelo Corolário \ref{colnp} do Lema de Neyman-Pearson, temos que $\delta\pow*$ é UMP para as hipóteses $H_0:\theta=\theta_0$ e $H_1':\theta=\theta'$, ou seja, $\pi(\theta|\delta\pow*)\geq\pi(\theta'|\delta)$, para qualquer teste $\delta$ de tamanho $\alpha_0$. Como $\theta'$ foi escolhido arbitrariamente diferente de $\theta_0$, temos que $\delta\pow*$ satisfaz $\pi(\theta|\delta\pow*)\geq\pi(\theta'|\delta)~\forall\,\theta'\neq\theta_0$, o que prova nossa afirmação inicial. $\blacksquare$
+	
+	
+	
 	
 	
 	
