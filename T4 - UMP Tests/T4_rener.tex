@@ -7,6 +7,7 @@
 \usepackage[portuguese]{babel}
 \usepackage{amsmath}%
 \usepackage{MnSymbol}%
+\usepackage{stackrel}
 %\usepackage{wasysym}%
 
 \newtheorem{defi}{Definicão}
@@ -226,6 +227,55 @@
 	$r(\bx)\geq c\Leftrightarrow \dfrac{g(r(\bx)|\theta')}{g(r(\bx)|\theta_0)}\geq k$.
 	
 	Pelo Corolário \ref{colnp} do Lema de Neyman-Pearson, temos que $\delta\pow*$ é UMP para as hipóteses $H_0:\theta=\theta_0$ e $H_1':\theta=\theta'$, ou seja, $\pi(\theta|\delta\pow*)\geq\pi(\theta'|\delta)$, para qualquer teste $\delta$ de tamanho $\alpha_0$. Como $\theta'$ foi escolhido arbitrariamente diferente de $\theta_0$, temos que $\delta\pow*$ satisfaz $\pi(\theta|\delta\pow*)\geq\pi(\theta'|\delta)~\forall\,\theta'\neq\theta_0$, o que prova nossa afirmação inicial. $\blacksquare$
+	
+	\mysection{4}{Duas-Caras e UMP para Bernoulli}
+	
+	Suponha que você encontra o Duas-Caras na rua e ele não vai com a sua... cara. 
+	Ele decide jogar a sua famosa moeda para o alto para decidir se te dá um cascudo.
+	Se der cara ($C$), você toma um cascudo.
+	Você, que sabe bem Estatística, pede que ele pelo menos jogue a moeda umas $n=10$ vezes antes de tomar a decisão derradeira.
+	
+	Surpreendentemente, ele concorda. 
+	Lança a moeda e obtém
+	$$ \text{KCKCKCCKKK} $$
+	
+	Você agora deve decidir se foge, se arriscando a tomar dois cascudos ao invés de um, ou se fica e  possivelmente não toma cascudo nenhum.
+	Se $p$ é a probabilidade de dar cara, estamos interessados em testar a hipótese
+	\begin{align*}
+	H_0 &:  p \leq \frac{1}{2},\\
+	H_1 &:p > \frac{1}{2}.
+	\end{align*}
+	
+	\begin{enumerate}
+		\item Escreva a razão de verossimilhanças para esta situação;
+		
+		Sejam $p_0$ e $p_1$, tais que $0<p_0\leq \frac{1}{2}<p_1<1$. Seja $X_i$ a variável indicadora de cara no $i$-ésimo lançamento do Duas-Caras; Assumindo que os 10 lançamentos são independentes, temos $X_1,X_2,\ldots,X_{10}\stackrel{iid}{\sim} \op{Bernoulli}(p)$, na qual $f(x_i|p)=p\pow{x_i}(1-p)\pow{1-x_i}$.
+		
+		A verossimilhança sera então:
+		
+		$$f_n(\bx|p)=\prod_{i=1}^{10}p\pow{x_i}(1-p)\pow{1-x_i}=p\pow{y}(1-p)\pow{10-y},$$
+		
+		onde $\displaystyle y=\sum_{i=1}^{10}x_i$.
+		
+		Assim, a razão de verossimilhança será:
+		
+		\begin{align*}
+			\dfrac{f_n(\bx|p_1)}{f_n(\bx|p_0)}&=\dfrac{p_1\pow{y}(1-p_1)\pow{10-y}}{p_0\pow{y}(1-p_0)\pow{10-y}}\\
+			&=\left[\dfrac{p_1(1-p_0)}{p_0(1-p_1)}\right]\pow y\left(\dfrac{1-p_1}{1-p_0}\right)\pow{10}
+		\end{align*}
+		
+		Podemos ver que a razão depende dos dados somente através da estatística suficiente $y$, e que a expressão é monótona em $y$, pois $p_0<p_1\Rightarrow \dfrac{p_1(1-p_0)}{p_0(1-p_1)}>1$, que mostra que a razão é estritamente crescente neste caso. Por definição, dizemos que a distribuição dos dados tem razão de verossimilhança monótona crescente (MLR\footnote{Monotone Likelihood Ratio} crescente).
+		
+		\item Nesta situação, é do seu interesse encontrar um teste UMP.
+		Faça isso e aplique o teste desenvolvido aos dados que conseguiu arrancar do Duas-Caras.
+		
+		Existe uma generalização dos resultados da seção anterior, que estende a noção de existência de UMP para $H_0$ composta, e inclui a hipótese de distribuição com MLR. Vamos enunciá-lo e demonstrá-lo brevemente, pois basta algumas adaptações da demonstração da seção anterior para $H_0$ simples.
+		
+		\begin{teo}
+			\textbf{(Teorema de Karlin-Rubin)}
+		\end{teo} 
+	\end{enumerate}
+	
 	
 	
 	
