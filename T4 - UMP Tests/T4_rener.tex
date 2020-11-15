@@ -7,8 +7,11 @@
 \usepackage[portuguese]{babel}
 
 \newtheorem{defi}{Definicão}
+\newtheorem{teo}{Teorema}
+\newtheorem{col}{Corolário}
 \setlength{\parindent}{0em}
 \newcommand{\indep}{\perp \!\!\! \perp} %% indepence
+\newcommand{\gt}{>}%broken keyboard
 \newcommand{\pr}{\operatorname{Pr}} %% probability
 \newcommand{\vr}{\operatorname{Var}} %% variance
 \newcommand{\rs}{X_1, X_2, \ldots, X_n} %%  random sample
@@ -74,7 +77,7 @@
 	\begin{defi}
 		\textbf{(Teste Uniformemente mais poderoso)}
 		\label{ump} 
-		Seja $\mathcal{C}$ uma classe de teste para as hipóteses (\ref{h0h1}); $\delta^*\in\mathcal{C}$ é chamado de uniformemente mais poderoso da classe $\mathcal{C}$, se:
+		Seja $\mathcal{C}$ uma classe de teste para as hipóteses (\ref{h0h1}); $\delta^*\in\mathcal{C}$ é chamado de uniformemente mais poderoso (UMP\footnote{Uniformly Most Powerful Test}) da classe $\mathcal{C}$, se:
 		
 		\begin{align*}\pi(\theta|\delta^*)&\geq\pi(\theta|\delta) ~\forall \,\theta \in \Omega_1,
 		\end{align*}
@@ -82,9 +85,77 @@
 		para qualquer teste $\delta\in\mathcal{C}$.
 		
 	\end{defi} 
-	Seguindo a motivação dada acima, podemos definir $\mathcal{C}$ como o conjunto de todos dos testes de tamanho menor ou igual a $\alpha_0$, limitando o erro tipo I.
+	Seguindo a motivação dada acima, podemos definir $\mathcal{C}$ como o conjunto de todos dos testes de tamanho menor ou igual a $\alpha_0$, limitando o erro tipo I. Neste caso, chamamos $\delta^*$ de UMP para (\ref{h0h1}) ao nível $\alpha_0$.
 	
-	\mysection{2}{Razão de Verossimilhanças Monótona}
+	\mysection{2}{Razão de Verossimilhança Monótona}
+	
+	\begin{defi}
+		\textbf{(Razão de Verossimilhanças Monótona)} Seja $f_n(\bx|\theta)$ a função de verossimilhança das observações $\bX = (\rs)$, e $T=r(\bX)$ uma estatística. Dizemos que a distribuição dos dados tem \textbf{razão de verossimilhanças monótona} quando, $\forall\,\theta_1,\theta_2\in\Omega; \theta_1<\theta_2$, a razão $\dfrac{f(\bx|\theta_2)}{f(\bx|\theta_1)}$ depende dos dados através de $r(\bx)$ somente, e é uma função monótona de $r(\bx)$ sob seu espaço de definição.
+	\end{defi}
+
+	\mysection{3}{UMP para $H_0$ simples}
+	
+	Considere uma hipótese nula simples, $H_0: \theta = \theta_0$, $\theta_0 \in \Omega$.
+	Mostraremos que, se vale o Teorema da Fatorização, e existem $c$ e $\alpha_0$ tais que
+	\begin{equation}
+	\pr\left(r(\bX) \geq c \mid \theta = \theta_0\right) = \alpha_0\nonumber,
+	\end{equation}
+	então o procedimento $\delta^\ast$ que rejeita $H_0$ se $r(\bX) \geq c$ é UMP para $H_0$ ao nível $\alpha_0$.
+	
+	Mas antes, vamos enunciar alguns teoremas:
+	
+	\begin{teo}
+		\textbf{(Teorema da Fatorização)(citar degroot)}
+		Sejam $\rs$ amostra aleatória de uma distribuição de densidade ou massa $f(x|\theta)$, onde $\theta\in\Omega$. Uma estatística $T=r(\rs)$ é suficiente para $\theta$, se, e somente se a distribuição conjunta dos dados $f_n(\bx|\theta)$ pode ser fatorizada como:
+		
+		\begin{align*}
+			f_n(\bx|\theta) = u(\bx)v[r(\bx),\theta],
+		\end{align*}
+		
+		para todo $\bx= (\rsd)\in\mathbb{R}^n$, e $\forall \theta \in \Omega$. $u$ e $v$ são funções não negativas.
+		
+	\end{teo}
+
+	A demostração pode ser encontrada em (degroot 445)
+	
+	\begin{teo}
+		\textbf{(Lema de Neyman-Pearson)(citar casella 388-389)} Seja $(\rs)\in\mathbb{R}^n$ uma amostra indexada por $\theta$. Considere as hipóteses
+		
+		\begin{align}
+		\label{hnp}
+		H_0:\theta=\theta_0,\\
+		H_1:\theta=\theta_1,\nonumber
+		\end{align}
+		
+		e seja $f_n(\bx|\theta_i)$, com $i=0,1$ a função de densidade ou massa dos dados.
+		
+		Seja $R\in\mathbb{R}^n$ uma região de rejeição que satisfaça:
+		
+		\begin{align}
+		\label{np1}
+			\bx\in R\text{ se } f(\bx|\theta_1)\gt kf(\bx|\theta_0)\nonumber\\ \\\text{ e }\bx\in R^C\text{ se } f(\bx|\theta_1)<k f(\bx|\theta_0),\nonumber
+		\end{align}
+		
+		para algum $k\geq0$ e 
+		
+		\begin{align}
+		\label{np2}
+			\pr(\bX\in R|\theta = \theta_0)=\alpha_0.
+		\end{align}
+		
+		Então, todo teste que satisfaz (\ref{np1}) e (\ref{np1}) é UMP ao nivel $\alpha_0$.
+	\end{teo}
+
+	A demostração será omitida pois pode ser encontrada em (citar casella).
+	
+	\begin{col}
+		Considere as hipóteses (\ref{hnp}). Seja $T(\bX)$ uma estatística suficiente para $\theta$ e $g(t|\theta_i)$ a distribuição de $T$ dado $\theta_i,\,i=0,1$.
+		
+		Seja $\delta$ um teste baseado em $T$ com região de rejeição $S$ (subconjunto do espaço de definição de $T$).
+	\end{col}
+	
+	
+	
 	
 	
 	
