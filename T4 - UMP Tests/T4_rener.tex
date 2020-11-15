@@ -12,6 +12,7 @@
 \setlength{\parindent}{0em}
 \newcommand{\indep}{\perp \!\!\! \perp} %% indepence
 \newcommand{\gt}{>}%broken keyboard
+\newcommand{\pow}{^}%broken keyboard
 \newcommand{\pr}{\operatorname{Pr}} %% probability
 \newcommand{\vr}{\operatorname{Var}} %% variance
 \newcommand{\rs}{X_1, X_2, \ldots, X_n} %%  random sample
@@ -27,7 +28,7 @@
 \newcommand{\bt}{\boldsymbol{t}} %%  Statistic, realised, vector form (bold)
 \newcommand{\emv}{\hat{\theta}_{\text{EMV}}}
 \newcommand{\defn}{\stackrel{\textrm{\scriptsize def}}{=}}
-\newcommand{\mysection}[2]{\setcounter{section}{#1}\addtocounter{section}{-1}\section*{#1 #2}}
+\newcommand{\mysection}[2]{\setcounter{section}{#1}\addtocounter{section}{-1}\section*{#1 - #2}}
 \newcommand{\op}{\operatorname}
 
 % Title Page
@@ -151,8 +152,44 @@
 	\begin{col}
 		Considere as hipóteses (\ref{hnp}). Seja $T(\bX)$ uma estatística suficiente para $\theta$ e $g(t|\theta_i)$ a distribuição de $T$ dado $\theta_i,\,i=0,1$.
 		
-		Seja $\delta$ um teste baseado em $T$ com região de rejeição $S$ (subconjunto do espaço de definição de $T$).
+		Seja $\delta$ um teste que rejeite $H_0$ se $T$ pertence a uma região de rejeição $S$ (subconjunto do espaço de definição de $T$). Assim, $\delta$ será UMP ao nível $\alpha_0$ se satisfazer:
+		
+		\begin{align}
+		\label{col1}
+		 g(t|\theta_1)\gt kg(t|\theta_0)\implies t\in S\nonumber\\ \\\text{ e }g(t|\theta_1)< kg(t|\theta_0)\implies t\in S\pow C,\nonumber
+		\end{align}
+		
+		para algum $k\geq0$ e 
+		
+		\begin{align}
+		\label{col2}
+		\pr[T(\bX)\in S|\theta = \theta_0]=\alpha_0.
+		\end{align}
+		
 	\end{col}
+	\textbf{Demonstração:} Definindo $R=\{\bx|T(\bx)\in S\}$, rejeitaremos $H_0$ se $\bx \in R$. Pelo Teorema da Fatorização, dado que $T(\bX)$ é suficiente, a verossimilhança de $\bX$ pode ser escrita como $f_n(\bx|\theta_i)=g(T(\bx)|\theta_i)u(\bx),\,i=0,1$, para alguma função $u(\bx)\geq 0$.
+	
+	Multiplicando tal função nas desigualdades (\ref{col1}) temos:
+	
+	\begin{align*}
+		&g(T(\bx)|\theta_1)\gt kg(T(\bx)|\theta_0)\\
+		\Leftrightarrow&
+		g(T(\bx)|\theta_1)u(\bx)\gt kg(T(\bx)|\theta_0)u(\bx)\\
+		\Leftrightarrow&f_n(\bx|\theta_1)\gt kf_n(\bx|\theta_0)
+	\end{align*}
+	
+	Assim, tem-se: $f_n(\bx|\theta_1)\gt kf_n(\bx|\theta_0)\implies T(\bx)\in S\implies \bx \in R$.
+	
+	Analogamente, $f_n(\bx|\theta_1)< kf_n(\bx|\theta_0)\implies \bx \in R\pow C$.
+	
+	
+	De (\ref{col2}), tem-se:
+	
+	\begin{align*}
+		\pr(\bX\in R|\theta=\theta_0)=\pr[T(\bX)\in S|\theta = \theta_0] = \alpha_0	
+	\end{align*}
+	
+	Pelo \textbf{Lema de Neyman-Pearson} concluímos que o teste $\delta$ é UMP ao nível $\alpha_0$.
 	
 	
 	
