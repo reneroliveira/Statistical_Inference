@@ -272,15 +272,19 @@
 		Existe uma generalização dos resultados da seção anterior, que estende a noção de existência de UMP para $H_0$ composta, e inclui a hipótese de distribuição com MLR. Vamos enunciá-lo e demonstrá-lo brevemente, pois basta algumas adaptações da demonstração da seção anterior para $H_0$ simples.
 		
 		\begin{teo}
-			\textbf{(Teorema de Karlin-Rubin)} Sejam as hipóteses:
+			\textbf{(Teorema de Karlin-Rubin)(citar casella)} Sejam as hipóteses:
 			
 			\begin{align*}
 				H_0:\theta\leq\theta_0\\
 				H_1:\theta\gt\theta_0
 			\end{align*}
 			
-			Seja $r(\bX)$ uma estatística suficiente para $\theta$. Suponha que a famiia de distribuição conjunta dos dados $\{f_n(\bx|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona. Assim, para qualquer $c$, o teste que rejeita $H_0$ se $r(\bx)$ se $r(\bx)\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[r(\bX)\geq c|\theta=\theta_0]$.
+			Seja $r(\bX)$ uma estatística suficiente para $\theta$. Suponha que a famiia de distribuição conjunta dos dados $\{f_n(\bx|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona. Assim, para qualquer $c$, o teste que rejeita $H_0$ se $r(\bx)$ se $r(\bx)\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[r(\bX)\geq c\,|\theta=\theta_0]$.
 		\end{teo} 
+	
+	\textbf{Demonstração:} Primeiramente devemos mostrar que o tamanho do teste é $\alpha_0$, ou seja:
+	
+	$$\sup_{\theta\leq\theta_0}\pr[r(\bX)\geq c\,|\theta]$$
 	
 	\end{enumerate}
 	
