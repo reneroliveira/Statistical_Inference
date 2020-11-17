@@ -6,7 +6,7 @@
 \usepackage{enumitem}
 \usepackage[portuguese]{babel}
 \usepackage{amsmath}%
-\usepackage{MnSymbol}%
+%\usepackage{MnSymbol}%
 \usepackage{stackrel}
 %\usepackage{wasysym}%
 
@@ -95,7 +95,7 @@
 	\mysection{2}{Razão de Verossimilhança Monótona}
 	
 	\begin{defi}
-		\textbf{(Razão de Verossimilhanças Monótona)} Seja $f_n(\bx|\theta)$ a função de verossimilhança das observações $\bX = (\rs)$, e $T=r(\bX)$ uma estatística. Dizemos que a distribuição dos dados tem \textbf{razão de verossimilhanças monótona} quando, $\forall\,\theta_1,\theta_2\in\Omega; \theta_1<\theta_2$, a razão $\dfrac{f(\bx|\theta_2)}{f(\bx|\theta_1)}$ depende dos dados através de $r(\bx)$ somente, e é uma função monótona de $r(\bx)$ sob seu espaço de definição.
+		\textbf{(Razão de Verossimilhanças Monótona)} Seja $f_n(\bx|\theta)$ a função de verossimilhança das observações $\bX = (\rs)$, e $T=r(\bX)$ uma estatística. Dizemos que a distribuição dos dados tem \textbf{razão de verossimilhanças monótona} sob $T$, quando, $\forall\,\theta_1,\theta_2\in\Omega; \theta_1<\theta_2$, a razão $\dfrac{f(\bx|\theta_2)}{f(\bx|\theta_1)}$ depende dos dados através de $r(\bx)$ somente, e é uma função monótona de $r(\bx)$ sob seu espaço de definição.
 	\end{defi}
 
 	\mysection{3}{UMP para $H_0$ simples}
@@ -259,12 +259,14 @@
 		
 		Assim, a razão de verossimilhança será:
 		
-		\begin{align*}
-			\dfrac{f_n(\bx|p_1)}{f_n(\bx|p_0)}&=\dfrac{p_1\pow{y}(1-p_1)\pow{10-y}}{p_0\pow{y}(1-p_0)\pow{10-y}}\\
-			&=\left[\dfrac{p_1(1-p_0)}{p_0(1-p_1)}\right]\pow y\left(\dfrac{1-p_1}{1-p_0}\right)\pow{10}
-		\end{align*}
+		\begin{align}
+			\dfrac{f_n(\bx|p_1)}{f_n(\bx|p_0)}&=\dfrac{p_1\pow{y}(1-p_1)\pow{10-y}}{p_0\pow{y}(1-p_0)\pow{10-y}}\nonumber\\
+			&=\left[\dfrac{p_1(1-p_0)}{p_0(1-p_1)}\right]\pow y\left(\dfrac{1-p_1}{1-p_0}\right)\pow{10}\label{lik_ratio}
+		\end{align}
 		
-		Podemos ver que a razão depende dos dados somente através da estatística suficiente $y$, e que a expressão é monótona em $y$, pois $p_0<p_1\Rightarrow \dfrac{p_1(1-p_0)}{p_0(1-p_1)}>1$, que mostra que a razão é estritamente crescente neste caso. Por definição, dizemos que a distribuição dos dados tem razão de verossimilhança monótona crescente (MLR\footnote{Monotone Likelihood Ratio} crescente).
+		Podemos ver que a razão depende dos dados somente através da estatística suficiente $y$, e que a expressão é monótona em $y$, pois $p_0<p_1\Rightarrow \dfrac{p_1(1-p_0)}{p_0(1-p_1)}>1$, que mostra que a razão é estritamente crescente neste caso. Por definição, dizemos que a distribuição dos dados tem razão de verossimilhança monótona crescente sob $y$ (MLR\footnote{Monotone Likelihood Ratio} crescente).
+		
+		Veja também que a distribuição da estatística $y$ também terá razão de verossimilhança monótona (sob o próprio $y$), pois é soma de 10 variáveis i.i.d bernoulli(p), logo $y\sim \op{Binomial}(10,p)$, cuja verossimilhança se descreve por $\mathcal{L}(p;y)={10\choose´ y}p\pow y (1-p)\pow{10-y}$. Se escolhermos $p_0<p_1$ como antes, a razão $\dfrac{\mathcal{L}(p_1;{y})}{\mathcal{L}(p_0;{y})}$ será exatamente igual a expressão (\ref{lik_ratio}), pois o termo ${10\choose y}$ se cancela. Assim, a distribuição da estatística suficiente $y=\displaystyle\sum_{i=1}^{10}x_i$ também tem MLR.
 		
 		\item Nesta situação, é do seu interesse encontrar um teste UMP.
 		Faça isso e aplique o teste desenvolvido aos dados que conseguiu arrancar do Duas-Caras.
@@ -272,19 +274,30 @@
 		Existe uma generalização dos resultados da seção anterior, que estende a noção de existência de UMP para $H_0$ composta, e inclui a hipótese de distribuição com MLR. Vamos enunciá-lo e demonstrá-lo brevemente, pois basta algumas adaptações da demonstração da seção anterior para $H_0$ simples.
 		
 		\begin{teo}
-			\textbf{(Teorema de Karlin-Rubin)(citar casella)} Sejam as hipóteses:
+			\textbf{(Teorema de Karlin-Rubin)(citar casella 391-392)} Sejam as hipóteses:
 			
 			\begin{align*}
 				H_0:\theta\leq\theta_0\\
 				H_1:\theta\gt\theta_0
 			\end{align*}
 			
-			Seja $r(\bX)$ uma estatística suficiente para $\theta$. Suponha que a famiia de distribuição conjunta dos dados $\{f_n(\bx|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona. Assim, para qualquer $c$, o teste que rejeita $H_0$ se $r(\bx)$ se $r(\bx)\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[r(\bX)\geq c\,|\theta=\theta_0]$.
+			Seja $T=r(\bX)$ uma estatística suficiente para $\theta$ e que a sua família de distribuições conjunta $\{g(t|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona. Assim, para qualquer $c$, o teste $\delta\pow*$ que rejeita $H_0$ $T\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[T\geq c\,|\theta=\theta_0]$.
 		\end{teo} 
 	
 	\textbf{Demonstração:} Primeiramente devemos mostrar que o tamanho do teste é $\alpha_0$, ou seja:
 	
-	$$\sup_{\theta\leq\theta_0}\pr[r(\bX)\geq c\,|\theta]$$
+	$$\sup_{\theta\leq\theta_0}\pr[T\geq c\,|\theta]$$
+	
+	Se a função poder for não-decrescente, o supremo ocorrerá em $\theta_0$ fica provada essa parte, pois foi suposto que $\pr[T\geq c\,|\theta=\theta_0]=\alpha_0$.
+	
+	Provaremos então que $\pi(\theta|\delta\pow*)$ é não-decrescente em $\theta$, ou seja, dados $\theta_1<\theta_2$, tem-se $\pi(\theta_1|\delta\pow*)\leq \pi(\theta_2|\delta\pow*)$, que equivale a provar que:
+	
+	\begin{align*}
+		&\pr(T\geq c|\theta_1)\leq \pr(T\geq c|\theta_1)\\\Leftrightarrow&\; 1-G(c|\theta_1)\leq 1-G(c|\theta_2)\\
+		\Leftrightarrow&\; G(c|\theta_1)\geq G(c|\theta_2)
+	\end{align*}
+	
+	Onde $G(t|\theta_i),\,i=1,2$ é a distribuição acumulada condicional a $\theta_i$ da estatística $T=r(\bX)$
 	
 	\end{enumerate}
 	
