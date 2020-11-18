@@ -364,12 +364,13 @@
 	\end{center}
 	
 	
+\end{enumerate}
 	
 	
-	
-	\item (Bônus) Mostre que, no item anterior, não é possível atingir qualquer nível $\alpha_0$, isto é, que $\alpha_0$ toma um número finito de valores.
+	\mysection{5}{Testes Randomizados} (Bônus) Mostre que, no item anterior, não é possível atingir qualquer nível $\alpha_0$, isto é, que $\alpha_0$ toma um número finito de valores.
 	Proponha uma solução para que seja possível atingir qualquer nível em $(0, 1)$.
 	
+	\textbf{Solução:}
 	\citep{degroot2012probability_random} Como vimos pela tabela, o fato da distribuição binomial ser discreta, impede que seja possível atingir qualquer $\alpha_0$. Uma solução alternativa, soluciona isso facilmente:
 	
 	No teste modificado, se $y<c$, rejeita-se $H_0$, se $y>c$ falha-se em rejeitar $H_0$, mas se $y=c$, rejeitamos $H_0$ com probabilidade $q$ de tal forma que:
@@ -380,7 +381,7 @@
 	
 	No caso acima, com c = 8, $\alpha_0=0.05$, temos $q=0.89\overline{3}$ (Python 3.7).
 	
-	\end{enumerate}
+	
 	
 	
 	
