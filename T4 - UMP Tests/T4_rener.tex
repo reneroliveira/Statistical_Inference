@@ -2,10 +2,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{natbib}
 \usepackage{amssymb}
+\usepackage{subfig}
 \usepackage{amsmath}
 \usepackage{enumitem}
+\usepackage{graphicx}
 \usepackage[portuguese]{babel}
 \usepackage{amsmath}%
+%\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage{graphics}
+\usepackage{booktabs} 
 %\usepackage{MnSymbol}%
 \usepackage{stackrel}
 %\usepackage{wasysym}%
@@ -110,7 +115,7 @@
 	Mas antes, vamos enunciar alguns teoremas:
 	
 	\begin{teo}
-		\textbf{(Teorema da Fatorização)(citar degroot)}
+		\textbf{(Teorema da Fatorização)\citep{degroot2012probability_fact}}
 		Sejam $\rs$ amostra aleatória de uma distribuição de densidade ou massa $f(x|\theta)$, onde $\theta\in\Omega$. Uma estatística $T=r(\rs)$ é suficiente para $\theta$, se, e somente se a distribuição conjunta dos dados $f_n(\bx|\theta)$ pode ser fatorizada como:
 		
 		\begin{align*}
@@ -121,10 +126,10 @@
 		
 	\end{teo}
 
-	A demostração pode ser encontrada em (degroot 445)
+	A demostração pode ser encontrada em \citep{degroot2012probability_fact}.
 	
 	\begin{teo}
-		\textbf{(Lema de Neyman-Pearson)(citar casella 388-389)} Seja $(\rs)\in\mathbb{R}^n$ uma amostra indexada por $\theta$. Considere as hipóteses
+		\textbf{(Lema de Neyman-Pearson)\citep{CaseBerg:01}} Seja $(\rs)\in\mathbb{R}^n$ uma amostra indexada por $\theta$. Considere as hipóteses
 		
 		\begin{align}
 		\label{hnp}
@@ -151,7 +156,7 @@
 		Então, todo teste que satisfaz (\ref{np1}) e (\ref{np2}) é UMP ao nivel $\alpha_0$.
 	\end{teo}
 
-	A demostração será omitida pois pode ser encontrada em (citar casella).
+	A demostração será omitida pois pode ser encontrada em \citep{CaseBerg:01}.
 	
 	\begin{col}
 		\label{colnp}
@@ -266,7 +271,7 @@
 		
 		Podemos ver que a razão depende dos dados somente através da estatística suficiente $y$, e que a expressão é monótona em $y$, pois $p_0<p_1\Rightarrow \dfrac{p_1(1-p_0)}{p_0(1-p_1)}>1$, que mostra que a razão é estritamente crescente neste caso. Por definição, dizemos que a distribuição dos dados tem razão de verossimilhança monótona crescente sob $y$ (MLR\footnote{Monotone Likelihood Ratio} crescente).
 		
-		Veja também que a distribuição da estatística $y$ também terá razão de verossimilhança monótona (sob o próprio $y$), pois é soma de 10 variáveis i.i.d bernoulli(p), logo $y\sim \op{Binomial}(10,p)$, cuja verossimilhança se descreve por $\mathcal{L}(p;y)={10\choose´ y}p\pow y (1-p)\pow{10-y}$. Se escolhermos $p_0<p_1$ como antes, a razão $\dfrac{\mathcal{L}(p_1;{y})}{\mathcal{L}(p_0;{y})}$ será exatamente igual a expressão (\ref{lik_ratio}), pois o termo ${10\choose y}$ se cancela. Assim, a distribuição da estatística suficiente $y=\displaystyle\sum_{i=1}^{10}x_i$ também tem MLR.
+		%Veja também que a distribuição da estatística $y$ também terá razão de verossimilhança monótona (sob o próprio $y$), pois é soma de 10 variáveis i.i.d bernoulli(p), logo $y\sim \op{Binomial}(10,p)$, cuja verossimilhança se descreve por $\mathcal{L}(p;y)={10\choose´ y}p\pow y (1-p)\pow{10-y}$. Se escolhermos $p_0<p_1$ como antes, a razão $\dfrac{\mathcal{L}(p_1;{y})}{\mathcal{L}(p_0;{y})}$ será exatamente igual a expressão (\ref{lik_ratio}), pois o termo ${10\choose y}$ se cancela. Assim, a distribuição da estatística suficiente $y=\displaystyle\sum_{i=1}^{10}x_i$ também tem MLR crescente.
 		
 		\item Nesta situação, é do seu interesse encontrar um teste UMP.
 		Faça isso e aplique o teste desenvolvido aos dados que conseguiu arrancar do Duas-Caras.
@@ -274,30 +279,106 @@
 		Existe uma generalização dos resultados da seção anterior, que estende a noção de existência de UMP para $H_0$ composta, e inclui a hipótese de distribuição com MLR. Vamos enunciá-lo e demonstrá-lo brevemente, pois basta algumas adaptações da demonstração da seção anterior para $H_0$ simples.
 		
 		\begin{teo}
-			\textbf{(Teorema de Karlin-Rubin)(citar casella 391-392)} Sejam as hipóteses:
+			\textbf{(Teorema de Karlin-Rubin)\citep{CaseBerg:karlin}} Sejam as hipóteses:
 			
-			\begin{align*}
+			\begin{align}
+			\label{h0_karlin}
 				H_0:\theta\leq\theta_0\\
-				H_1:\theta\gt\theta_0
-			\end{align*}
+				H_1:\theta\gt\theta_0\nonumber
+			\end{align}
 			
-			Seja $T=r(\bX)$ uma estatística suficiente para $\theta$ e que a sua família de distribuições conjunta $\{g(t|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona. Assim, para qualquer $c$, o teste $\delta\pow*$ que rejeita $H_0$ $T\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[T\geq c\,|\theta=\theta_0]$.
+			Seja $T=r(\bX)$ uma estatística suficiente para $\theta$ e suponha que a família de distribuições dos dados $\{f(\bx|\theta)|\theta\in\Omega\}$ tem razão de verossimilhança monótona não-decrescente sob $T$. Assim, para qualquer $c$, o teste $\delta\pow*$ que rejeita $H_0$ se $T\geq c$ é um teste UMP ao nível $\alpha_0$, onde $\alpha_0=\pr[T\geq c\,|\theta=\theta_0]$.
 		\end{teo} 
 	
-	\textbf{Demonstração:} Primeiramente devemos mostrar que o tamanho do teste é $\alpha_0$, ou seja:
+	\textbf{Demonstração:} Devemos mostrar que o tamanho do teste é $\alpha_0$ e que $\delta\pow*$ é UMP. O fluxo da demostração será parecido com a do Corolário (\ref{colnp}).
 	
-	$$\sup_{\theta\leq\theta_0}\pr[T\geq c\,|\theta]$$
+	Para a primeira parte, queremos que,
 	
-	Se a função poder for não-decrescente, o supremo ocorrerá em $\theta_0$ fica provada essa parte, pois foi suposto que $\pr[T\geq c\,|\theta=\theta_0]=\alpha_0$.
+	$$\sup_{\theta\leq\theta_0}\pr[T\geq c\,|\theta]=\alpha_0$$
 	
-	Provaremos então que $\pi(\theta|\delta\pow*)$ é não-decrescente em $\theta$, ou seja, dados $\theta_1<\theta_2$, tem-se $\pi(\theta_1|\delta\pow*)\leq \pi(\theta_2|\delta\pow*)$, que equivale a provar que:
+	Na última demostração o supremo era trivial pois era tomado em um conjunto unitário, agora a situação se complica. Se a função poder for não-decrescente, o supremo ocorrerá em $\theta_0$ e fica provada essa parte, pois foi suposto que $\pr[T\geq c\,|\theta=\theta_0]=\alpha_0$. Provaremos isso ao longo deste texto. 
+	
+	Fixemos $\theta'$ arbitrário tal que $\theta'>\theta_0$, testaremos $H_0':\theta=\theta_0$ contra $H_1':\theta=\theta'$.  Como $T=r(\bX)$ é suficiente, pelo \textbf{Teorema da Fatorização}, temos que a verossimilhança pode ser escrita como $f_n(\bx|\theta)=g(t|\theta)u(\bx)$, para alguma função $u(\bx)\geq0$, com $t=r(\bx)$.
+	
+	Definamos:
 	
 	\begin{align*}
-		&\pr(T\geq c|\theta_1)\leq \pr(T\geq c|\theta_1)\\\Leftrightarrow&\; 1-G(c|\theta_1)\leq 1-G(c|\theta_2)\\
-		\Leftrightarrow&\; G(c|\theta_1)\geq G(c|\theta_2)
+	k=\inf_{t\in\mathcal{T}}\dfrac{f_n(\bx|\theta')}{f_n(\bx|\theta_0)}=\dfrac{g(t|\theta')}{g(t|\theta_0)}
 	\end{align*}
 	
-	Onde $G(t|\theta_i),\,i=1,2$ é a distribuição acumulada condicional a $\theta_i$ da estatística $T=r(\bX)$
+	Com $\mathcal{T}:\defn\{t|t\geq c\}$. A existência de tal ínfimo já foi justificada.
+	
+	Segue que:
+	
+	$t\geq c\Leftrightarrow \dfrac{g(t|\theta')}{g(t|\theta_0)}\geq k$.
+	
+	
+	\citep{scharf1991statistical}Pelo Corolário (\ref{colnp}), temos que $\delta\pow*$ é UMP para a hipótese simples $H_0'$, ou seja, $\pi(\theta'|\delta\pow*)\leq\pi(\theta'|\delta_2)$, onde $\delta_2$ é um teste qualquer de nível $\alpha_0$ para $H_0'$. Como o processo não depende de $\theta'$, $\delta\pow*$ é UMP considerendo $H_1:\theta>\theta_0$.
+	
+	O poder de $\delta\pow*$ avaliado em $\theta=\theta_0$ é igual a $\alpha_0$ pelo enunciado do teorema. Para qualquer $\theta'>\theta_0$, temos $\pi(\theta'|\delta\pow*)\leq\alpha_0$, pelo fato de ser mais poderoso que um teste de tamanho igual a $\alpha_0$ por exemplo.
+	
+	Tomando um $\theta_2<\theta_0$, e testando $H_0'':\theta=\theta_2$ contra $H_1'':\theta>\theta_2$. O teste $\delta\pow*$ terá um certo tamanho $\alpha''$.  por argumentos similares aos apresentados acima, tal teste é mais poderoso (UMP) que qualquer outro de nível $\alpha''$, como o poder avaliado em $\theta=\theta_0$ é $\alpha_0$, conclui-se que $\alpha''\leq\alpha_0$. Dessa forma, vemos que a função poder é não-decrescente em $\theta$. Assim concluímos o argumento inicial, de que $\sup_{\theta\leq\theta_0}\pi(\theta|\delta\pow*)$.
+	
+	A conclusão de que $\delta\pow*$ é UMP para as hipóteses (\ref{h0_karlin}) segue do argumento de que, dado um teste $\delta$ de tamanho $\alpha(\delta)\leq\alpha_0$ e seu poder não excede $\pi(\theta|\delta\pow*)$, pois $\delta$ tem poder menor ou igual a $\alpha_0$, quando avaliado em $\theta=\theta_0$, por continuidade e monotinicidade, o poder de $\delta$ será menor que o de $\delta\pow*$, o que finaliza a prova. $\blacksquare$
+	
+	
+	Voltando ao problema do duas caras, temos todas as condições satisfeitas para aplicar \textbf{Karlin-Rubin}: As hipóteses são do mesmo formato, $y$ é estatística suficiente, a razão de verossimilhança é crescente sob $y$. Assim escolheremos um limiar $c$ de forma forçada para que $\pr(y\geq c|p=1/2)=\alpha_0$, ou seja $1-F(c|p=1/2)=\alpha_0\Rightarrow F(c|p=1/2)=1-\alpha_0$, onde $F(x|p)$ é a distribuição acumulada da $\op{Binomial}(10,p)$.
+	
+	\begin{table}[!htb]
+		\begin{center}
+	
+		\begin{tabular}{lrr}
+			\toprule
+			{c} &     $F(c|p=1/2)$ \\
+			\midrule
+			0  &     0.000977 \\
+			1  &    0.010742 \\
+			2  &      0.054688 \\
+			3  &     0.171875 \\
+			4  &     0.376953 \\
+			5  &     0.623047 \\
+			6  &     0.828125 \\
+			7  &     0.945312 \\
+			8  &     0.989258 \\
+			9  &     0.999023 \\
+			10 &     1.000000 \\
+			\bottomrule
+		\end{tabular}
+	
+	\caption{Tabela gerada com Python 3.7}
+		\label{tabela}
+	\end{center}
+	\end{table}
+		
+		
+	Vamos tomar $\alpha_0=0.05$, assim $1-\alpha_0=0.95$. Como a distribuição é discreta, esses valores são são atingíveis nessa formulação, escolhemos então $c$ tal que o poder é $\leq\alpha_0$, ou seja $F(c)\geq 0.95$. No caso faremos $c=8$ pela Tabela \ref{tabela}.
+	
+	No nosso caso o $y$ observado foi $y=5$ caras. Como $y<c$, falhamos em rejeitar a hipótese nula $p\leq 1/2$, o que empresta credibilidade para tal. Sendo assim, é razoável aceitar a proposta do Duas-Caras de lançar a moeda, pois no pior dos casos, tomaremos um cascudo apenas, ao invés de dois, caso fugíssemos.
+	
+	Veja abaixo um gráfico da função poder quando $c=8$ em função de $p$. Veja que realmente é uma função não-decrescente como havíamos demonstrado.
+	
+	\begin{center}
+		\includegraphics[scale=1]{power.png}
+	%	\caption{Função Poder c = 8}
+	%	\label{fig:power}
+	\end{center}
+	
+	
+	
+	
+	
+	\item (Bônus) Mostre que, no item anterior, não é possível atingir qualquer nível $\alpha_0$, isto é, que $\alpha_0$ toma um número finito de valores.
+	Proponha uma solução para que seja possível atingir qualquer nível em $(0, 1)$.
+	
+	\citep{degroot2012probability_random} Como vimos pela tabela, o fato da distribuição binomial ser discreta, impede que seja possível atingir qualquer $\alpha_0$. Uma solução alternativa, soluciona isso facilmente:
+	
+	No teste modificado, se $y<c$, rejeita-se $H_0$, se $y>c$ falha-se em rejeitar $H_0$, mas se $y=c$, rejeitamos $H_0$ com probabilidade $q$ de tal forma que:
+	
+	$\pr(y>c|p=1/2)+q\pr(y=c|p=1/2)=\alpha_0$
+	
+	Assim, fazendo $q=\dfrac{\alpha_0-\pr(y>c|p=1/2)}{\pr(y=c|p=1/2)}$ chegamos ao nível desejado.
+	
+	No caso acima, com c = 8, $\alpha_0=0.05$, temos $q=0.89\overline{3}$ (Python 3.7).
 	
 	\end{enumerate}
 	
@@ -309,8 +390,9 @@
 	
 	
 	
-	
-	% \bibliographystyle{apalike}
-	% \bibliography{refs}
+	\newpage
+	%\printbibliography
+	 \bibliographystyle{plain}
+	 \bibliography{refs}
 	
 \end{document}        
