@@ -1,0 +1,360 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[pdftex,bookmarks=true,bookmarksopen=false,bookmarksnumbered=true,colorlinks=true,linkcolor=black]{hyperref}
+% \usepackage{biblatex}
+
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{tocbibind}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[shortlabels]{enumitem}
+\setlength{\parindent}{0em}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 {í}{{\'i}}1 {ç}{{\c{c}}}1 {Ç}{{\c{C}}}1 {õ}{{\~o}}1 {ó}{{\'o}}1 {ô}{{\^o}}1 {ú}{{\'u}}1
+}
+
+\lstset{style=mystyle}
+\renewcommand{\lstlistingname}{Algoritmo}
+\usepackage[brazil]{babel}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{subfig}
+\usepackage{csquotes}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+%\usepackage{pstricks}%, egameps}
+
+%\setlength{\textwidth}{17.2cm}
+% \setlength{\textheight}{23cm}
+%\addtolength{\oddsidemargin}{-22mm} 
+%\addtolength{\topmargin}{-15mm} \addtolength{\evensidemargin}{-15mm}
+%\setlength{\parskip}{1mm}
+%\setlength{\baselineskip}{500mm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{acknowledgment}{Acknowledgment}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{case}{Case}
+\newtheorem{claim}{Claim}
+\newtheorem{conclusion}{Conclusion} 
+\newtheorem{condition}{Condition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{criterion}{Criterion}
+\newtheorem{defn}{Definition}[section]
+
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{notation}{Notation}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{remark}{Remark}
+\newtheorem{solution}{Solution}
+\newtheorem{summary}{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\rule{0.5em}{0.5em}}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\textbf{\LARGE Fundação Getúlio Vargas}\\ 
+\textbf{\LARGE Escola de Matemática Aplicada}
+
+\par
+\vspace{160pt}
+\textbf{\Large Rener Oliveira}\\
+\vspace{160pt}
+\textbf{\Large Inferência Estatística Trabalho 1: Método Delta}\\
+
+\end{center}
+\vspace{32pt}
+\par
+\vfill
+\vspace{32pt}
+\begin{center}
+{\normalsize Agosto de 2020}
+\end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+
+
+%------------------------>>>>>>>>>>Começaremos por aqui
+%\newpage
+%\addcontentsline{toc}{section}{Introdução} \section*{Introdução}
+
+\newpage
+\section{Teorema de Taylor}
+
+Notação: $f(x)\underset{x\to a}{\longrightarrow}b$ representa $\displaystyle\lim_{x\to a}f(x)=b$.
+
+.
+
+\textbf{Definição 1.1: (Polinômio de Taylor)}\cite{lima1981curso} Dada uma função $f:I\subset\mathbb{R}\longrightarrow \mathbb{R}$, $n$ vezes derivável no ponto $a\in I$, o Polinômio de Taylor de ordem $n$ de $f$ no ponto $a$ é o polinômio:
+
+$$p(h)=\displaystyle\sum_{k=0}^{n}\dfrac{f^{(k)}(a)}{k!}h^k$$
+
+,onde $f^{(k)}(a)$ é a $k$-ésima derivada de $f$ em $a$\footnote{$f^{(0)}(a)=f(a)$}.
+
+\textbf{Teorema 1.1: (Teorema de Taylor)}\cite{lima1981curso} Dada uma função $f:I\subset\mathbb{R}\rightarrow \mathbb{R}$, $n$ vezes derivável no ponto $a\in I$ existe, para todo $h$ tal que $a+h\in I$, um polinômio $p$ de grau $\leq n$ (Polinômio de Taylor de $f$ no ponto $a$) tal que
+
+\begin{center}
+    $f(a+h)=p(h)+r(h)$,            onde $\displaystyle\lim_{h\to0}\dfrac{r(h)}{h^n}=0$
+\end{center}
+
+Isso quer dizer, $f(a)$ é igual a $p(h)$ a menos de um resto $r(h)$ infinitesimal, que converge pra zero mais rápido do que potências de $h$. Ou seja, o polinômio $p$ será uma boa aproximação para $f$ nesse ponto.
+
+\textbf{Lema 1.1: }\cite{lima1981curso} Seja $r:I\subset\mathbb{R}\longrightarrow\mathbb{R}$, n vezes derivável ($n\geq1$) em $0\in I$. São equivalentes:
+
+\begin{enumerate}[i)]
+    \item $r(0)=r'(0)=~.~.~.~=r^{(n)}(0)=0$
+    \item $\displaystyle\lim_{h\to0}\frac{r(h)}{h^n}=0$
+\end{enumerate}
+
+\textbf{Demonstração do Lema 1.1:}\cite{lima1981curso}
+Primeiramente, vamos provar (i)$\rightarrow$(ii), com um argumento indutivo em $n$.
+
+\textbf{(Base)} Para $n=1$, temos de (i) que $r(0)=r'(0)=0$
+
+Veja então que $\dfrac{r(h)}{h}=\dfrac{r(h)-r(0)}{r-0}$. Ao tomar o limite $h\to0$, temos por definição $r'(0)$ que é nula por (i). Logo $\displaystyle\lim_{h\to0}\frac{r(h)}{h}=0$, o que prova (ii) para $n=1$
+
+\textbf{(Hipótese Indutiva)} Suponha que $\exists n\in\mathbb{Z}^+$ tal que (i)$\rightarrow$(ii) para $n-1$
+
+\textbf{(Passo Indutivo)} Queremos provar que (i)$\rightarrow$(ii) para $n$.
+
+Sabemos que $r(0)=r'(0)=~.~.~.~=r^{(n)}(0)=0$ e pela \textbf{Hipótese Indutiva}:
+
+$$\dfrac{r'(h)}{h^{n-1}}\underset{h\to0}{\longrightarrow}0$$
+
+o que significa que, por definição,
+
+$\forall \varepsilon>0,~\exists\delta>0$, tal que $\forall h\in I$, $0<|h|<\delta\rightarrow\left|\dfrac{r'(h)}{h^{n-1}}\right|<\varepsilon$
+
+Pelo Teorema do Valor Médio\cite{lima1981curso}, $\exists c\in (0,h)$ tal que $r(h) = r'(c)h$; Dividindo por $h^n$ ambos os membros, temos:
+\begin{center}
+$\dfrac{r(h)}{h^n}=\dfrac{r'(c)}{h^{n-1}}\Rightarrow$
+
+$
+\left|\dfrac{r(h)}{h^n}\right|=\left|\dfrac{r'(c)}{h^{n-1}}\right|\leq\left|\dfrac{r'(c)}{c^{n-1}}\right|\cdot\left|\dfrac{c^{n-1}}{h^{n-1}}\right|\leq \varepsilon\cdot1$,
+
+pois $0<|c|<|h|<\delta$
+\end{center}
+
+Dessa forma $\displaystyle\lim_{h\to0}\dfrac{r(h)}{h^n}=0$.
+
+Provaremos agora que (ii)$\Rightarrow$(i), também usando indução.
+
+\textbf{(Base)} Para $n=1$, sabemos que $\dfrac{r(h)}{h}\underset{h\to0}{\longrightarrow}0$, e queremos provar $r(0)=r'(0)=0$.
+
+Note que $h\neq0\Rightarrow r(h)=\dfrac{r(h)}{h}h$. Assim:
+
+$\displaystyle\lim_{h\to0} r(h) = \lim_{h\to0} \left(\dfrac{r(h)}{h}h\right)=\lim_{h\to0}\left(\dfrac{r(h)}{h}\right)\lim_{h\to0} h = 0\cdot 0 =0$
+
+Pela continuidade, $r(h)=0$
+
+Por definição, $r'(0)=\displaystyle\lim_{h\to0}\dfrac{r(h)-r(0)}{h-0}$.
+
+Assim, $r'(0)=\displaystyle\lim_{h\to0}\dfrac{r(h)}{h}=0$
+
+Logo, fica provado (ii)$\rightarrow$(i) para $n=1$.
+
+\textbf{(Hipótese Indutiva)} Suponha que $\exists n\in\mathbb{Z}^+$ tal que (ii)$\rightarrow$(i) para $n-1$.
+
+\textbf{(Passo Indutivo)} Sabe-se que $r$ é $n$ vezes derivável e que
+
+$\dfrac{r(h)}{h^n}\underset{h\to0}{\longrightarrow}0$
+
+Tomemos $\phi:I\longrightarrow\mathbb{R}$ definida como:
+
+$\phi(h)=r(h)-\dfrac{r^{(n)}(0)}{n!}h^n$
+
+Temos que:
+
+\begin{itemize}
+    \item $\phi$ é n vezes derivável
+    \item $\dfrac{\phi(h)}{h^{n-1}}\overset{h\to0}{\longrightarrow}0$
+\end{itemize}
+    
+Usando a \textbf{Hipótese Indutiva}, chegaremos em:
+
+$\phi(0)=\phi'(0)=~.~.~.~=\phi^{(n-1)}(0)=0\Rightarrow\\
+r(0)=r'(0)=~.~.~.~=r^{(n-1)}(0)=0$
+
+Resta provar que $r^{(n)}(0)=0$.
+
+Veja que $\phi^{(n)}(0)=r^{(n)}(0)-\dfrac{r^{(n)}(0)}{n!}\cdot n!$, isso pois derivar n vezes $h^n$ nos dá $n!$.
+
+Dessa forma, $\phi^{(n)}(0)=r^{(n)}(0)-r^{(n)}(0)=0$
+
+Podemos agora, usar que (i)$\Rightarrow$(ii) para a função $\phi$, obtendo:
+
+$\dfrac{\phi(h)}{h^n}\underset{h\to0}{\longrightarrow}0$
+
+ou seja:
+
+$\left(\dfrac{r(h)}{h^n}-\dfrac{r^{(n)}(0)}{n!}\right)\underset{h\to0}{\longrightarrow}0$
+
+Sabemos que $\dfrac{r(h)}{h^n}\underset{h\to0}{\longrightarrow}0$, o que implica em
+
+$\dfrac{r^{(n)}(0)}{n!}\underset{h\to0}{\longrightarrow}0\Rightarrow r^{(n)}(0)\underset{h\to0}{\longrightarrow}0$
+
+Pela continuidade de $r^{(n)}(0)$, concluímos que $r^{(n)}(0)=0$
+$\blacksquare$
+
+\textbf{Demonstração do Teorema 1.1: }\cite{lima1981curso}
+
+Dados $f:I\longrightarrow\mathbb{R}$, $a\in I$, tomemos um polinômio $p$ e escrevamos:
+
+$f(a+h)=p(h)+r(h)$
+
+Com isso, define-se $r:J\longrightarrow\mathbb{R}$, onde $J=\{h\in\mathbb{R}|a+h\in I\}$. Zero, claramente pertence a $J$, dado que $h=0$ satisfaz a propriedade de pertinência. Sendo assim, como \footnote{$p$, por ser polinômio, é infinitamente derivável e todas as derivadas são contínuas.}$p\in C^{\infty}$ segue que $f$ é n vezes derivável em $a$, se e somente se, $r$ é n vezes derivável no ponto $0$. fazendo essa hipótese, segue do \textbf{Lema 1.1} que $\dfrac{r(h)}{h^n}\underset{h\to0}{\longrightarrow}0\Longleftrightarrow r^{(i)}(0)=0,
+~\forall ~0\leq i\leq n$
+
+Mas $r^{(i)}(0)=f^{(i)}(a)-p^{(i)}(0)$. Assim, temos que, dada as hipóteses acima, $f^{(i)}(a)=p^{(i)}(0),~\forall ~0\leq i\leq n$
+
+Se impusermos que o grau de $p$ seja menor ou igual à $n$, podemos mostrar que $\dfrac{r(h)}{h^n}\underset{h\to0}{\longrightarrow}0$, se e somente se, $p$ é o Polinômio de Taylor de ordem $n$ para $f$ no ponto $a$, o que prova o Teorema. $\blacksquare$
+
+
+
+\section{Método Delta}
+
+
+
+% \addcontentsline{toc}{section}{Método Delta - Enunciado} \section*{Método Delta - Enunciado}
+\textbf{Definição 2.1: }\cite{CaseBerg:01} Uma sequência $X_n$ de variáveis aleatórias converge em distribuição para $X$ se, dado $F_X:D\subset\mathbb{R}\longrightarrow\mathbb{R}$ a função de distribuição acumulada (contínua) de $X$, tem-se
+
+$$\displaystyle\lim_{n\to\infty}\left[Pr(X_n\leq x\right)]=F_X(x),~~\forall x\in D$$
+
+Podemos dizer também, que $X_n$ converge em distribuição para $F_X$.
+
+
+\textbf{Método Delta:}\cite{degroot2012probability}  Seja $Y_n$ uma sequência de variáveis aleatórias e $F^*$ uma função de densidade acumulada. Dado $\theta \in\mathbb{R}$ e $a_n$ uma sequência monótona crescente de termos positivos, tal que $\lim a_n=\infty$. 
+
+Suponhamos que $a_n(Y_n-\theta)$ converge em distribuição para $F$. Seja $g$ uma função de derivada contínua com $g'(\theta)\neq0$, então $a_n\dfrac{g(Y_n)-g(\theta)}{g'(\theta)}$ converge em distribuição para $F^*$.
+
+\textbf{Demonstração:}\cite{degroot2012probability}
+
+O fato de $a_n\underset{n\to\infty}{\longrightarrow}\infty$, força que $Y_n-\theta\underset{n\to\infty}{\longrightarrow}0$, pois se $_n-\theta\underset{n\to\infty}{\longrightarrow}k$, com $k\in\mathbb{R}^*$ teríamos $a_n(Y_n-\theta)=a_nk\underset{n\to\infty}{\longrightarrow}\infty$, a assim, $\displaystyle\lim_{n\to\infty}[Pr(a_n(Y_n-\theta)\leq x]=0$ e $a_n(Y_n-\theta)$ não convergiria para $F^*$ como é assumido.
+
+A função $g\in C^1$, podemos então, pelo \textbf{Teorema 1.1} e \textbf{Definição 1.1} aproximar $g(Y_n)$ pelo Polinômio de Taylor de ordem 1 de $g$ no ponto $Y_n$. Fazendo $h=Y_n-\theta$, temos que:
+
+$g(\theta+h)\approx g(\theta)+\dfrac{g'(\theta)}{1!}h\Rightarrow\\
+g(Y_n)\approx g(\theta)+g'(\theta)(Y_n-\theta)$
+
+Assim:
+
+$g(Y_n)-g(\theta) \approx g'(\theta)(Y_n-\theta)$
+
+Vamos multiplicar ambos os lados por $\dfrac{a_n}{g'(\theta)}$ (que existe pois $g'(\theta)\neq0$):
+
+$a_n\dfrac{g(Y_n)-g(\theta)}{g'(\theta)}\approx a_n(Y_n-\theta)$
+
+Como assumimos que $a_n(Y_n-\theta)$ converge em distribuição para $F^*$, segue que $a_n\dfrac{g(Y_n)-g(\theta)}{g'(\theta)}$ também converge em distribuição para $F^*$ já que são assintoticamente iguais.
+
+\subsection{Condições de Funcionamento}
+
+O Teorema assume várias hipóteses e todas elas tem que ser preservadas afim de que possamos aplicá-lo.
+
+Hipóteses:
+
+\begin{itemize}
+    \item $F^*$ contínua
+    \item $a_n\underset{n\to\infty}{\longrightarrow}\infty$
+    \item $a_n\in\mathbb{Z}^+\forall n$
+    \item $a_n(Y_n-\theta)$ converge em distribuição para $F^*$
+    \item $g\in C^1$, tal que $g'(\theta)\neq0$
+\end{itemize}
+
+\subsection{Corolário}
+
+\textbf{Corolário 2.1: }\cite{degroot2012probability} Seja $X_n$ uma sequência de variáveis aleatórias i.i.d de um distribuição com média $\mu$ e variância $\sigma^2$. Dada uma função $g$ derivável, tal que $g'(\theta)\neq 0$, então a distribuição assintótica de 
+
+$$\dfrac{\sqrt{n}}{\sigma g'(\mu)}[g(\overline{X}_n-g(\mu)]$$
+
+é a Normal Padrão.
+
+
+\textbf{Demonstração: } Façamos $a_n=\sqrt{n}/\sigma$, $F^*=\Phi(x)$\footnote{$\Phi(x)=Pr(\mathcal{Z}\leq x)$, com $\mathcal{Z}\sim \mathcal{N}(0,1)$}, $\theta = \mu$ e $Y_n=\overline{X}_n$.
+
+Do Teorema Central do Limite\cite{degroot2012probability} temos que 
+
+$$\displaystyle\lim_{n\to\infty}Pr\left[\sqrt{n}\dfrac{\overline{X}_n-\mu}{\sigma}\leq x\right]=\Phi(x)$$,
+
+
+Temos então todas as hipóteses para aplicar o Método Delta, que afirmará:
+
+$$\displaystyle\lim_{n\to\infty}Pr\left[\sqrt{n}\dfrac{g(\overline{X}_n)-g(\mu)}{\sigma g'(\mu)}\leq x\right]=\Phi(x)$$
+
+Podemos concluir também, que $g(\overline{X}_n)$ terá uma distribuição normal com média $g(\mu)$ e variância $\sigma^2[g'(\mu)]^2$.
+
+\subsection{Aproximação de Variância}
+
+Suponha que observamos n variáveis aleatórias Bernoulli independentes e identicamente distribuídas com parâmetro $p$, denotadas por $X_1,X_2,~...,~X_n$. Suponha que estamos interessados no parâmetro $\omega=\frac{p}{1-p}$, geralmente chamado de chance (em inglês, odds). E natural utilizar o estimador plug-in
+$\hat{\omega}=\frac{\hat{p}}{1-\hat{p}}$, com $\hat{p} = \frac{1}{n}\sum_{i=1}^{n}X_i$. Utilizaremos o Método Delta para encontrar uma aproximação para a variância de $\hat{\omega}$
+
+Temos uma função $g(\theta)=\dfrac{\theta}{1-\theta}$ diferenciável e $g'(\theta)=\dfrac{1}{(1-\theta)^2}$. Cada $X_i\sim be(p)$, onde $E[X_i]=p$ e $Var[X_i]=p(1-p)$. Todos os $X_i$'s são i.i.d's com essa média e variância. Dado que $g'(\theta)\neq 0 ~\forall\theta$, Podemos aplicar o \textbf{Corolário 2.1} e concluir que 
+
+$g(\hat{p})=\hat{\omega}$ tem distribuição (assintótica) normal com média $\frac{p}{1-p}$ e variância igual a:
+
+$Var[\hat{p}]\cdot [g'(p)]^2=\\
+Var\left[\frac{1}{n}\sum_{i=1}^{n}X_i\right]\cdot\left(\dfrac{1}{(1-p)^2}\right)^2=\\ \\
+\dfrac{Var[X_i]}{n}\cdot\dfrac{1}{(1-p)^4}=~~
+\dfrac{p(1-p)}{n(1-p)^4}=\\ \\
+\dfrac{p}{n(1-p)^3}$
+
+\subsection{Importância do Método}
+
+Como vimos a partir do Corolário, é possível estabelecer distribuições para funções da média amostral, uma variável aleatória muito importante. De forma geral, o método é importante pois conseguimos caracterizar distribuições de funções (deriváveis, e de derivada não nula) de variáveis aleatórias e não somente das próprias variáveis, como foi o caso do exemplo acima que estávamos interessados no \textit{odds}.
+
+De certa forma podemos enxergar o Método Delta como uma generalização do Teorema Central do Limite, que dá aproximações assintóticas normais para variáveis iid, hipótese que não é exigida diretamente pelo Método Delta.
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+% \addcontentsline{toc}{section}{Referências}
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

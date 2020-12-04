@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{CaseBerg:01}
+George Casella and Roger Berger.
+\newblock {\em Statistical Inference}, pages 388--389.
+\newblock {Duxbury Resource Center}, June 2001.
+
+\bibitem{CaseBerg:karlin}
+George Casella and Roger Berger.
+\newblock {\em Statistical Inference, Theorem 8.3.7}, pages 391--392.
+\newblock {Duxbury Resource Center}, June 2001.
+
+\bibitem{degroot2012probability_fact}
+M.H. DeGroot and M.J. Schervish.
+\newblock {\em Probability and Statistics, 4th ed.}, pages 444--446.
+\newblock Addison-Wesley, 2012.
+
+\bibitem{degroot2012probability_random}
+M.H. DeGroot and M.J. Schervish.
+\newblock {\em Probability and Statistics, 4th ed.}, pages 556--557.
+\newblock Addison-Wesley, 2012.
+
+\bibitem{scharf1991statistical}
+L.L. Scharf and C.~Demeure.
+\newblock {\em Statistical Signal Processing: Detection, Estimation, and Time
+  Series Analysis}, pages 124--126.
+\newblock Addison-Wesley series in electrical and computer engineering.
+  Addison-Wesley Publishing Company, 1991.
+
+\end{thebibliography}

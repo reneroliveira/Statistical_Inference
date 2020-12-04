@@ -1,0 +1,459 @@
+\documentclass[a4paper]{article}
+\setlength{\parindent}{0em}
+%%%%%%%% CREATE DOCUMENT STRUCTURE %%%%%%%%
+%% Language and font encodings
+\usepackage[portuguese]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{subfig}
+\usepackage{cancel}
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=2cm]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pythonhighlight}
+%% Useful packages
+\usepackage{amsmath,amsfonts}
+\usepackage{wasysym}%
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{sectsty}
+%\usepackage{apacite}
+%\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}
+\usepackage[square,sort,comma,numbers]{natbib}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{xcolor}
+\newcommand{\lik}{\mathcal{L}}
+\definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+\usepackage[portuguese]{babel}
+\usepackage[autostyle,portuguese=brazilian]{csquotes}
+%\MakeOuterQuote{"}
+\newcommand{\op}[1]{{\operatorname{#1}}}
+\newcommand{\vX}{\vec X}
+\newcommand{\xn}{\bar{x}_n}
+\newcommand{\sn}{s^2_n}
+%%%%%%%% DOCUMENT %%%%%%%%
+\begin{document}
+\newtheorem{definition}{Definição}
+\newtheorem{theorem}{Teorema}
+\newtheorem{identity}{Identidade}
+%%%% Title Page
+\begin{titlepage}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 							% horizontal line and its thickness
+\center 
+ 
+% University
+\vfill
+\textsc{\LARGE Fundação Getúlio Vargas}\\[1cm]
+
+% Document info
+\textsc{\Large Inferência Estatística}\\[0.2cm]
+%\textsc{\large COURSECODE}\\[1cm] 										% Course Code
+\HRule \\[0.8cm]
+{ \huge \bfseries Trabalho III: Análise Bayesiana}\\[0.7cm]								% Assignment
+\HRule \\[2cm]
+\large
+Rener de Souza Oliveira\\
+rener.oliveira@fgv.edu.br\\[1.5cm]
+Rio de Janeiro, RJ\\
+{\large \today}\\[5cm]
+%\includegraphics[width=0.6\textwidth]{images/TU_delft_logo.jpg}\\[1cm] 	% University logo
+\vfill 
+\end{titlepage}
+
+
+\tableofcontents
+
+\newpage
+\section{Introdução}
+ "Neste trabalho, vamos derivar os principais resultados de uma análise bayesiana conjugada de dados normalmente distribuídos.
+ Para tal, começamos com uma reparametrização.
+ Em particular, fazemos $\tau = 1/\sigma^2$, de modo que os parâmetros de interesse $\theta = (\mu, \sigma^2)$ se tornem $\phi = (\mu, \tau)$.
+ O parâmetro $\tau$ é chamado de~\textit{precisão}.
+ Suponha que observamos uma amostra aleatória $X_1, \ldots, X_n$ com distribuição normal com parâmetros $\mu$ e $\tau$, ambos desconhecidos"\footnote{Trecho retirado da descrição do trabalho.}
+ 
+\section{A distribuição Normal-Gama}
+ Iremos derivar uma família de distribuições que serão conjugadas que funcionará como priori conjugada para $\phi$. Ou seja, dada uma priori para $\phi$ de distribuição normal-gama, teremos que a distribuição da posteriori também será normal-gama.
+ 
+ Primeiramente, vamos determinar a distribuição conjunta condicional dos dados sob a nova parametrização.
+ 
+ Para um dado $X_i \sim \op{Normal}(\mu,\sigma^2)$ temos a distribuição de densidade de probabilidade como:
+ 
+ $$f(x_i|\mu,\sigma^2)=\dfrac{1}{\sqrt{2\pi\sigma^2}}\exp{\left[-\dfrac12\dfrac{(x_i-\mu)^2}{\sigma^2}\right]}$$
+ 
+ Fazendo $\sigma^2=1/\tau$, temos:
+ 
+  $$f(x_i|\mu,\tau)=\sqrt{\dfrac{\tau}{2\pi}}\exp{\left[-\dfrac{\tau}2 (x_i-\mu)^2\right]}$$
+  
+  Usaremos a notação $X_i\sim \op{Normal_2}(\mu,\tau)$, para se referir à esta nova parametrização que utiliza precisão.
+  
+  Assumindo que os dados são independentes e identicamente distribuídos, temos que a função de verossimilhança, ou distribuição conjunta consicional dos dados é:
+  
+  \begin{align}
+  f(\vX|\phi) &= \prod_{i=1}^{n}f(x_i|\phi)\nonumber\\
+  &=\left(\dfrac{\tau}{2\pi}\right)^{n/2}\exp{\left[-\dfrac{\tau}{2}\sum_{i=1}^{n}(x_i-\mu)^2\right]}\label{likelehood}
+  \end{align}
+  
+  Vamos assumir que a distribuição à priori de $\tau$ é $\op {Gama}(\alpha_0,\beta_0)$ e a distribuição à priori condicional de $\mu|\tau$ é Normal de média $\mu_0$ e precisão $\lambda_0\tau$. Essa é uma premissa razoável por dois motivos: o primeiro é o que o espaço de definição dos parâmetros coincide com o espaço onde as densidades das distrivuições citadas estão definidas, $\mu$ é definino na reta assim como a normal, e $\tau$ é definido para os positivos assim como a gama; o segundo motivo é que pela expressão da verossimilhança (\ref{likelehood}), se multiplicarmos com a densidade de uma normal, a forma funcional parece que também irá se comportar como uma normal, o mesmo ocorre para gama. Mostraremos isso de forma mais clara a seguir, provando que as distribuições à posteriori são da mesma família. Mas antes, calcularemos a priori conjunta de $\phi=(\mu,\tau)$:
+  
+  Dados $\xi_1(\mu|\tau)=\sqrt{\dfrac{\lambda_0\tau}{2\pi}}\exp{\left[-\dfrac{\lambda_0\tau}2 (\mu-\mu_0)^2\right]}$ e $\xi_2(\tau)=\dfrac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)}\tau^{\alpha_0-1}e^{-\beta_0\tau}$, temos que a distribuição conjunta $\xi(\mu,\tau)$ é:
+  
+  \begin{align}
+  \xi(\mu,\tau)&=\xi_1(\mu|\tau)\xi_2(\tau)\nonumber\\
+  &=\displaystyle\dfrac{\beta_0^{\alpha_0}\sqrt{\lambda_0}}{\Gamma(\alpha_0)\sqrt{2\pi}}\tau^{\alpha_0-\frac12}e^{-\beta_0\tau}e^{-\frac{\lambda_0\tau (\mu-\mu_0)^2}2}\label{jointprior}
+  \end{align}
+  \begin{center}para  $\mu\in\mathbb{R}$ e $\tau\in\mathbb{R}_{>0}$.\end{center}
+\begin{definition}[Distribuição Normal-Gama:]
+	A distribuição acima é conhecida como $\op{Normal-Gama}$ de parâmetros $\mu_0,\lambda_0,\alpha_0,\beta_0$. Pode ser fatorizada facilmente como um produto das densidades de uma $\op{Gama}(\alpha_0,\beta_0)$ e uma $\op{Normal_2}(\mu_0,\lambda_0\tau)$, pela própria construção. Além disso a região de definição dos parâmetros é: $\mu_0\in\mathbb{R}$, $\lambda_0\in\mathbb{R}_{>0}$, $\alpha_0\in\mathbb{R}_{>0}$ e $\beta_0\in\mathbb{R}_{>0}$.\label{def1}
+\end{definition}
+
+De fato, trata-se de uma densidade válida pois fatorizando $\tau^{\alpha_0-1/2}=\tau^{\alpha_0-1}\tau^{1/2}$ a integral dupla da função sobre o espaço de definição de $\phi$ é facilmente calculável via integração iterada de Fubini\citep{wiki:Fubini's_theorem} e resulta em 1:
+
+\begin{align*}
+	\displaystyle \int_{0}^{+\infty}\int_{-\infty}^{+\infty}\xi(\mu,\tau)d\mu d\tau &=\int_{0}^{+\infty}\left(\dfrac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)}\tau^{\alpha_0-1}e^{-\beta_0\tau}\int_{-\infty}^{+\infty}\sqrt{\dfrac{\lambda_0\tau}{2\pi}}e^{-\frac{\lambda_0\tau (\mu-\mu_0)^2}2}d\mu\right)d\tau\\
+	&=\int_{0}^{+\infty}\dfrac{\beta_0^{\alpha_0}}{\Gamma(\alpha_0)}\tau^{\alpha_0-1}e^{-\beta_0\tau}d\tau=1
+\end{align*}
+
+
+ 
+ 
+\subsection{Distribuições à posteriori}
+
+Com base nos resultados (\ref{likelehood}) e (\ref{jointprior}), podemos derivar a distribuição à posteriori conjunta de $\phi=(\mu,\tau)$ e a partir dela, a distribuição condicional de $\mu|\tau$ e as marginais à posteriori de $\tau$ e $\mu$.
+
+\textbf{Notações:}
+
+\begin{align*}
+\xn&=\dfrac{1}{n}\sum_{i=1}^{n}x_i\\
+\sn&=\sum_{i=1}^{n}(x_i-\xn)^2
+\end{align*}
+\begin{theorem}
+	\label{theo1}
+	\citep{degroot2012probability}
+	Suponha que $X_1,. . . ,X_n$ formam uma amostra aleatória de um distribuição Normal de média $\mu$ desconhecida e precisão $\tau$ também desconhecida ($\mu\in\mathbb{R}$ e $\tau\in\mathbb{R}_{>0}$). Se a distribuição conjunta à priori de $\phi=(\mu,\tau)$ é $\op{Normal-Gama}(\mu_0,\lambda_0,\alpha_0,\beta_0)$, então a distribuição à posteiori é $\op{Normal-Gama}(\mu_1,\lambda_1,\alpha_1,\beta_1)$, onde:
+	
+	\begin{align*}
+	\mu_1&=\dfrac{\lambda_0\mu_0+n\xn}{\lambda_0+n}&&\lambda_1=\lambda_0+n\\
+	\alpha_1&=\alpha_0+\dfrac n 2&&\beta_1=\beta_0+\dfrac12\sn+\dfrac{n\lambda_0(\xn-\mu_0)^2}{2(\lambda_0+n)}
+	\end{align*}
+	
+	Consequentemente, a distribuição condicional de $\mu|\tau$ é $\op{Normal}(\mu_1,\lambda_1)$ e a marginal à posteriori de $\tau$ é $\op{Gama}(\alpha_1,\beta_1)$.
+\end{theorem}
+
+\textbf{Prova:}
+
+Assumindo que a distribuição conjunta à posteriori $f(\phi|\vX)$ seja realmente $\op{Normal-Gama}(\mu_1,\lambda_1,\alpha_1,\beta_1)$, teremos da Definição (\ref{def1}):
+
+\begin{align*}f(\phi|\vX)&\displaystyle\propto\tau^{\alpha_1-\frac12}e^{-\beta_1\tau}e^{-\frac{\lambda_1\tau (\mu-\mu_1)^2}2}\\
+&\propto \tau^{\alpha_1+\frac12-1}e^{-\beta_1\tau}\exp{\left[-\frac{\lambda_1\tau (\mu-\mu_1)^2}2\right]}\\
+&\propto\tau^{\alpha_1-1}e^{-\beta_1\tau}\tau^{\frac12}\exp{\left[-\frac{\lambda_1\tau (\mu-\mu_1)^2}2\right]}
+\end{align*}
+
+Daí podemos extrair:
+
+\begin{align}
+	f(\tau|\vX)&=\displaystyle\int_0^{\infty}f(\phi|\vX)d\mu\nonumber\\
+	&\propto \tau^{\alpha_1-1}e^{-\beta_1\tau}\label{marg_tau}
+\end{align}
+
+e também:
+
+\begin{align}
+f(\mu|\tau,\vX)&=\dfrac{f(\mu,\tau|\vX)}{f(\tau|\vX)}\nonumber\\
+&\propto\dfrac{\tau^{\alpha_1-1}e^{-\beta_1\tau}\tau^{\frac12}\exp{\left[-\frac{\lambda_1\tau (\mu-\mu_1)^2}2\right]}}{\tau^{\alpha_1-1}e^{-\beta_1\tau}}\nonumber\\
+&\propto \tau^{\frac12}\exp{\left[-\frac{\lambda_1\tau (\mu-\mu_1)^2}2\right]}\label{cond_mu}
+\end{align}
+
+De (\ref{marg_tau}) segue que a distribuição à posteriori de $\tau|\vX\sim \op{Gama}(\alpha_1,\beta_1)$ e de (\ref{cond_mu}) segue que $\mu|\tau,\vX\sim\op{Normal_2}(\mu_1,\lambda_1\tau)$
+
+Provamos então a segunda parte do Teorema, mas ainda não provamos que $f(\phi|\vX)\sim\op{Normal-Gama}(\mu_1,\lambda_1,\alpha_1,\beta_1)$.
+
+Multiplicando à densidade da distribuição à priori (\ref{jointprior}) com a função de verossimilhança dos dados (\ref{likelehood}), teremos:
+
+\begin{align}
+\xi(\mu,\tau)f(\vX|\mu,\tau)&\propto \tau^{\alpha_0+\frac n 2-\frac12}e^{-\beta_0\tau}\exp{\left[-\dfrac{\tau}{2}\left(\lambda_0(\mu-\mu_0)+\sum_{i=1}^{n}(x_i-\mu)^2\right)\right]}\label{qsilik}
+\end{align}
+
+\begin{identity}
+	\[\sum_{i=1}^{n}(x_i-\mu)^2=\sn+n(\xn-\mu)^2\]
+\end{identity}
+\textbf{Prova:}
+
+\begin{align*}
+	\sum_{i=1}^{n}(x_i-\mu)^2&=\sum_{i=1}^{n}(x_i-\xn+\xn-\mu)^2\\
+	&=\sum_{i=1}^{n}\left[(x_i-\xn)^2+2(x_i-\xn)(\xn-\mu)+(\xn-\mu)^2\right]\\
+	&=\sum_{i=1}^{n}(x_i-\xn)^2+2(\xn-\mu)\sum_{i=1}^{n}(x_i-\xn)+\sum_{i=1}^{n}(\xn-\mu)^2\\
+	&=\sum_{i=1}^{n}(x_i-\xn)^2+2(\xn-\mu)\left(\sum_{i=1}^{n}x_i-n\xn\right)+n(\xn-\mu)^2\\
+	&=\sum_{i=1}^{n}(x_i-\xn)^2+2(\xn-\mu)\left(n\xn-n\xn\right)+n(\xn-\mu)^2\\
+	&=\sum_{i=1}^{n}(x_i-\xn)^2+n(\xn-\mu)^2
+\end{align*}
+
+Aplicando a Identidade acima na expressão (\ref{qsilik}), temos:
+\begin{align*}
+\xi(\mu,\tau)f(\vX|\mu,\tau)&\propto \tau^{\alpha_0+\frac n 2-\frac12}e^{-\beta_0\tau}\exp{\left[-\dfrac{\tau}{2}\left(\lambda_0(\mu-\mu_0)+\sn+n(\xn-\mu)^2\right)\right]}
+\end{align*}
+
+Vamos agora para mais manipulações algébricas,
+\begin{identity}
+	\[\lambda_0(\mu-\mu_0)+n(\xn-\mu)^2=(\lambda_0+n)(\mu-\mu_1)+\dfrac{n\lambda_0(\xn-\mu_0)^2}{\lambda_0+n}\]
+\end{identity}
+
+\textbf{Prova:}
+
+\begin{align*}
+	\lambda_0(\mu-\mu_0)+n(\xn-\mu)^2&=\lambda_0(\mu^2+2\mu\mu_0+\mu_0^2)+n(\mu^2-2\mu\xn+\xn^2)\\
+	&=\mu^2(\lambda_0+n)+\mu(-2\lambda_0\mu_0-2n\xn)+\lambda_0\mu_0^2+n\xn^2\\
+	&=(\lambda_0+n)\left[\mu^2-\dfrac{2\mu(\lambda_0\mu_0+n\xn)}{\lambda_0+n}\right]+\lambda_0\mu_0^2+n\xn^2\\
+	&=(\lambda_0+n)(\mu-\mu_1)^2-\mu_1^2(\lambda_0+n)+\lambda_0\mu_0^2+n\xn^2\\
+	&=(\lambda_0+n)(\mu-\mu_1)^2+\dfrac{-(\lambda_0\mu_0+n\xn)^2+(\lambda_0+n)(\lambda_0\mu_0^2+n\xn^2)}{\lambda_0+n}\\
+	&=(\lambda_0+n)(\mu-\mu_1)^2+\dfrac{-\bcancel{\lambda_0^2\mu_0^2}-2\lambda_0\mu_0n\xn-\cancel{n^2\xn^2}+\bcancel{\lambda_0^2\mu_0^2}+\lambda_0n\xn^2+n\lambda_0\mu_0^2+\cancel{n^2\xn^2}}{\lambda_0+n}\\
+	&=(\lambda_0+n)(\mu-\mu_1)^2+\dfrac{n\lambda_0(\xn^2-2\mu_0\xn+\mu_0^2)}{\lambda_0+n}\\
+	&=(\lambda_0+n)(\mu-\mu_1)^2+\dfrac{n\lambda_0(\xn-\mu_0)^2}{\lambda_0+n}
+\end{align*}
+
+Voltando ao trabalho, e aplicando a nova identidade acima temos:
+
+\begin{align*}
+\xi(\mu,\tau)f(\vX|\mu,\tau)&\propto \tau^{\alpha_0+\frac n 2-\frac12}e^{-\beta_0\tau}\exp{\left[-\dfrac{\tau}{2}\left(\sn+(\lambda_0+n)(\mu-\mu_1)^2+\dfrac{n\lambda_0(\xn-\mu_0)^2}{\lambda_0+n}\right)\right]}\\
+&\propto \tau^{\alpha_0+\frac n 2-\frac12}\exp{\left[-\beta_0\tau-\dfrac{\tau\sn}{2}-\dfrac{\tau n\lambda_0(\xn-\mu_0)^2}{2(\lambda_0+n)}\right]}\exp{\left[-\dfrac{\tau}{2}(\lambda_0+n)(\mu-\mu_1)^2\right]}\\
+&\propto\tau^{\alpha_1-\frac12}e^{-\beta_1\tau}\exp{\left[-\dfrac{\lambda_1\tau(\mu-\mu_1)^2}{2}\right]}
+\end{align*}
+
+Esse é o numerador da dossa distribuição à posteriori conjunta. O denominador será a integral do numerador sobre o espaço de definição de $\phi=(\mu,\tau)$, mas o numerador é o núcleo de uma distribuição $\op{Normal-Gama}(\mu_1,\lambda_1,\alpha_1,\beta_1)$, logo, à menos que uma constante que não depende de $\phi$, a integral é igual a $1$, portanto:
+
+\begin{align}\xi(\mu,\tau|\vX)\propto \tau^{\alpha_1-\frac12}e^{-\beta_1\tau}\exp{\left[-\dfrac{\lambda_1\tau(\mu-\mu_1)^2}{2}\right]},\label{posteriori}\end{align}
+
+que é núcleo da distribuição almejada, o que finaliza a prova do teorema.
+
+\vspace{1cm}
+
+\subsection{Análise dos hiperparâmetros}
+
+Vejamos novamente as espressões dos parâmetros à posteriori:
+
+\begin{align*}
+\mu_1&=\dfrac{\lambda_0\mu_0+n\xn}{\lambda_0+n}&&\lambda_1=\lambda_0+n\\
+\alpha_1&=\alpha_0+\dfrac n 2&&\beta_1=\beta_0+\dfrac12\sn+\dfrac{n\lambda_0(\xn-\mu_0)^2}{2(\lambda_0+n)}
+\end{align*}
+
+As expressões de $\mu_1$ e $\lambda_1$ são bastante sugestivas, a primeira é uma média ponderada entre $\mu_0$ e $\xn$ onde o peso de $\mu_0$ é o hiperparâmetro $\lambda_0$ e o peso de $\xn$ é o número de observações $n$. Ou seja, a média a posteriori vai juntar o conhecimento à priori da média, com o conhecimento obtido a partir dos dados por $\xn$ que é estimador de máxima verossimilhança pra média.
+
+Além disso $\displaystyle\lim_{n\to\infty}\mu_1=\lim_{n\to\infty}\left(\dfrac{\lambda_0}{\lambda_0+n}\mu_0+\dfrac{n}{\lambda_0+n}\xn\right)=\xn,$
+
+mostrando que a média à posteriori converge para o estimador de máxima verossimilhança com $n$ grande.
+
+O hiperparâmetro $\lambda_0$ também é interpretado como número de pseudo-observações\citep{wiki:Normal-gamma_distribution} representando de certa forma, observações conhecidas à priori, ou simplesmente, o conhecimento do estatístico que está fazendo a elicitação das prioris.
+
+A expressão $\lambda_1=\lambda_0+n$ incrementa esse número de pseudo-obervações com as novas obervações, vindas dos dados.
+
+Também podemos interpretar os parâmetros da $\op{Gama}$ nesse contexto de pseudo-observações\citep{wiki:Normal-gamma_distribution}. Podemos enxergar como se tivéssesmos à priori $2\alpha_0$ pseudo-observações\footnote{$2\alpha_0$ não necessariamente precisa ser igual a $\lambda_0$. Essa independência é introduzida na interpretação de forma que os pseudo-experimentos Normal e Gamma sejam diferentes.} do experimento $\op{Normal_2}(\mu,\tau)$, a variância amostral desse experimento é o valor esperado de $\tau^{-1}$, ou seja $\dfrac{\beta_0}{\alpha_0}$. 
+
+Interpretando $\alpha_0$ como metade da quantidade de pseudo-observações. O incremento ao observar os dados é de $n/2$ como sugere a expresão à posteriori.
+
+A interpretação de $\beta_0$ neste contexto será metade da soma dos erros quadráticos à priori; isso pois, como a variância amostral do pseudo-experimento é $\beta_0/\alpha_0$ ao multiplicar pela quantidade de pseudo-observações teremos a soma dos erros quadráricos amostrais que é $2\beta_0$.
+
+A expresssão de $\beta_1$ deve então simbolizar a soma dos erros quadráticos do experimento à posteriori; Assim, somando à $\beta_0$, $\sn/2$ que é metade do erro quadrático dos dados em relacão a média amostral, já temos parte da expressão. 
+
+O terceiro termo $\dfrac{n\lambda_0(\xn-\mu_0)^2}{2(\lambda_0+n)}$ pode ser entendido como um "termo de interação", e sua existência se justifica pelo fato dos erros anteriores terem sido calculados em relação a médias diferentes: $2\beta_0$ é erro quadrático das pseudo-observações, apesar de não termos explicitado, é óbvio que isso é calculado em ralação à $\mu_0$ que pode ser interpretado como média amostral do pseudo-experimento neste contexto. Assim, adicionamos uma penalidade sobre a distância dessa média $\mu_0$ e a observada pelos dados $\xn$, com o termo $\dfrac{n\lambda_0}{\lambda_0+n}$ funcionando como uma constante balizadora entre pseudo-obervações e observações dos dados de fato.
+
+Essa interpretação do $\beta_0$ e $\beta_1$ como erros quadráticos faz sentido, pois numa situação onde esses erros são altos, significa que há muita incerteza sobre a distribuição dos dados, e isso é refletido como uma redução do valor esperado de $\tau$, já que $\beta_0$ $\beta_1$ ficam no denominador de $E(\tau|\vX)=\alpha_1/\beta_1$. Na expressão de $\alpha_1=\alpha_0+n/2$ essa noção é ainda mais clara, pois, fixando $\beta_1$, quando maior for o $n$ (quanto mais dados observamos), nossa precisão aumenta pelo fato de termos mais informações.
+
+
+\section{A distribuição marginal de $\mu$}
+
+Por definição, a função de densidade da distribuição marginal à posteriori de $\mu$ é calculada por:
+
+\[f_{\mu}(\mu|\vX)=\int_{0}^{\infty}\xi(\mu,\tau|\vX)d\tau\]
+
+De (\ref{posteriori}), temos:
+
+\begin{align*}
+f_{\mu}(\mu|\vX) &= c\cdot\int_{0}^{\infty} \tau^{\alpha_1-\frac12}e^{-\beta_1\tau}\exp{\left[-\dfrac{\lambda_1\tau(\mu-\mu_1)^2}{2}\right]} d\tau\\
+&=c\cdot\int_{0}^{\infty}\tau^{\alpha_1+\frac12-1}\exp{\left[-\tau\left(\beta_1+\dfrac{\lambda_1(\mu-\mu_1)^2}{2}\right)\right]}d\tau,
+\end{align*}
+
+Onde $c$ é a constante da densidade da $\op{Normal-Gamma}$: $c=\dfrac{\beta_1^{\alpha_1}\lambda_1^{\frac12}}{\Gamma(\alpha_1)(2\pi)^{\frac12}}$.
+Note que o integrando acima é o núcleo de uma distribuição $\op{Gama}\left(\alpha_1+\frac12,\beta_1+\dfrac{\lambda_1(\mu-\mu_1)^2}{2}\right)$. Assim:
+
+\begin{align*}
+	f_{\mu}(\mu|\vX)&=c\cdot \dfrac{\Gamma(\alpha_1+\frac12)}{\left(\beta_1+\dfrac{\lambda_1(\mu-\mu_1)^2}{2}\right)^{\alpha_1+\frac12}}\\
+	&=\dfrac{\beta_1^{\alpha_1}\lambda_1^{\frac12}\Gamma{(\alpha_1+\frac12)}}{\Gamma(\alpha_1)(2\pi)^{\frac12}}\cdot \left(\beta_1+\dfrac{\lambda_1(\mu-\mu_1)^2}{2}\right)^{-\alpha_1-\frac12}\\
+	&=\dfrac{\beta_1^{-\frac12}\lambda_1^{\frac12}\Gamma{(\alpha_1+\frac12)}}{\Gamma(\alpha_1)(2\pi)^{\frac12}}\left(1+\dfrac{\lambda_1(\mu-\mu_1)^2}{2\beta_1}\right)^{-\alpha_1-\frac12}\\
+	&=\dfrac{\alpha_1^{\frac12}\beta_1^{-\frac12}\lambda_1^{\frac12}\Gamma{(\frac{2\alpha_1+1}{2})}}{\Gamma(\frac{2\alpha_1}{2})(2\alpha_1\pi)^{\frac12}}\left(1+\dfrac{\lambda_1\alpha_1(\mu-\mu_1)^2}{2\alpha_1\beta_1}\right)^{-\frac{2\alpha_1-1}2}
+\end{align*}
+
+Fazendo $\nu=2\alpha_1$, $c_2=\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{\frac12}$ e  $y=c_2(\mu-\mu_1)$, temos:
+
+\begin{align*}
+f_{\mu}(\mu|\vX)&=c_2\dfrac{\Gamma(\frac{\nu+1}{2})}{\Gamma(\frac{\nu}{2})\sqrt{\nu\pi}}\left(1+\dfrac{y^2}{2}\right)^{-\frac{\nu+1}2},
+\end{align*}
+
+que é $c_2$ vezes a densidade da distribuição $\op{t}$ de Student\citep{wiki:Student-distribution} com $\nu=2\alpha_1$ graus de liberdade.
+
+A distribuição marginal de $\mu$ nada mais é do que uma $\op{t}_{\nu}$ escalonada por $c_2^{-1}$ e deslocada por $\mu_1$. Isso vem por manipulação direta de $y$. Com isso, sabendo que $E(y)=0$ para $\nu>1$ e $Var(y)=\dfrac{\nu}{\nu-2}$ para $\nu>2$, temos:
+
+\begin{align*}
+	E(\mu)&=c_2^{-1}E(y)+\mu_1=\mu_1,~para~\alpha_1>\frac12\\
+	Var(\mu)&=c_2^{-2}Var(y)=\dfrac{\beta_1}{\lambda_1\alpha_1}\dfrac{\alpha_1}{\alpha_1-1}=\dfrac{\beta_1}{\lambda_1(\alpha_1-1)}~para~\alpha_1>1
+\end{align*}
+
+Todos esses resultados podem ser derivados de forma análoga para a distribuição marginal à priori de $\mu$, bastando trocar $\mu_1,\lambda_1,\alpha_1,\beta_1$ respectivamente por $\mu_0,\lambda_0,\alpha_0,\beta_0$.
+
+Verbalizando melhor, temos:
+
+\begin{theorem}[Marginal à priori de $\mu$]
+	\label{priorvar}
+	A distribuição de $\left(\dfrac{\lambda_0\alpha_0}{\beta_0}\right)^{\frac12}(\mu-\mu_0)$ é $\op{t}$ de Student com $2\alpha_0$ graus de liberdade e:
+	
+	\begin{align*}
+	E(\mu)&=\mu_0,~para~\alpha_1>\frac12\\
+	Var(\mu)&=\dfrac{\beta_0}{\lambda_0(\alpha_0-1)}~para~\alpha_1>1
+	\end{align*}
+	
+
+	
+\end{theorem}
+\section{O Dilema da Palmirinha}
+
+Palmirinha anda preocupada com a concentração de amido em sua pamonha.
+Ela pede para Valciclei, seu assistente, amostrar $n=10$ pamonhas e medir sua concentração de amido.
+
+Ele, muito prestativo, rapidamente faz o experimento, mas, porque comeu todas as amostras depois que foram medidas, precisou fazer uma visita de emergência ao banheiro. 
+Desta feita, apenas teve tempo de anotar em um papel a média e variância amostrais, $\bar{x}_n =  8.307849$ e $\bar{s}^2_n = 7.930452$.
+
+Palmirinha tem uma reunião com investidores em pouco tempo, então decide voltar aos seus tempos de bayesiana~\textit{old school} e analisar os dados utilizando prioris conjugadas.
+Ela supõe que a concentração de amido segue uma distribuição normal com parâmetros $\mu$ e $\tau$ e que as observações feitas por Valciclei são independentes entre si.
+Ela suspeita que a concentração de amido na pamonha fique em torno de $10$ mg/L, com desvio padrão de  $2$ mg/L.
+Com sua larga experiência na confecção de pamonhas, ela suspeita ainda que o coeficiente de variação da concentração de amido seja em torno de $1/2$.
+Palmirinha tem um quadro em seu escritório, que diz
+\[ \operatorname{cv} = \frac{\sigma}{\mu}. \]
+
+\subsection{Posterioris}
+
+Sabendo que $\mu|\vX\sim \left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}\op{t}_{2\alpha_1}+\mu_1$ e que, pelo Teorema (\ref{theo1}), temos
+
+	\begin{align*}
+\mu_1&=\dfrac{\lambda_0\mu_0+n\xn}{\lambda_0+n}&&\lambda_1=\lambda_0+n\\
+\alpha_1&=\alpha_0+\dfrac n 2&&\beta_1=\beta_0+\dfrac12\sn+\dfrac{n\lambda_0(\xn-\mu_0)^2}{2(\lambda_0+n)},
+\end{align*}
+
+, dada uma atribuição de valores para os hiperparâmetros $\mu_0,\lambda_0,\alpha_0,\beta_0$, a distribuição à posteriori de $mu$ fica definida, pois tais valores mais as estatísticas suficientes calculadas por Valciclei ($\xn$ e $\sn$) definem de forma fechada $\mu_1,\lambda_1,\alpha_1,\beta_1$ e consequentemente, a distribuição $\mu|\vX$.
+
+Analogamente, com tais informações, poderíamos gerar a distribuição de $\tau|\vX$, pois esta é $\op{Gama}(\alpha_1,\beta_1)$ que é está definida com as informações de Valciclei e os hiperparâmetros.
+
+\subsection{Intervalos de Credibilidade}
+
+Queremos ajudar a Palmirinha a encontrar $a, b \in \mathbb{R}$, $a < b$ de modo que $\operatorname{Pr}(\mu \in (a, b) \mid \vX) = 0.95$. De modo geral, sabendo que $\mu|\vX\sim \left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}\op{t}_{2\alpha_1}+\mu_1$, se quisermos $a<b$ na qual $\operatorname{Pr}(\mu \in (a, b) \mid \vX) = \gamma$, com $0<\gamma <1$, é conveniente tratar o problema de forma simétrica já que estamos falando da distribuição $\op{t}$, sendo assim, tomemos $c$, de tal forma que $\op{Pr}(-c<\op{t}_{2\alpha_1}<c)=\gamma$; Se $T_{2\alpha_1}$ é a função de densidade acumulada da $\op{t}_{2\alpha_1}$, então temos:
+
+\begin{align*}
+	\op{Pr}(-c<\op{t}_{2\alpha_1}<c)=\gamma&\Leftrightarrow T_{2\alpha_1}(c)-T_{2\alpha_1}(-c)=\gamma\\
+	&\Leftrightarrow T_{2\alpha_1}(c)-(1-T_{2\alpha_1}(c))=\gamma\\
+	&\Leftrightarrow 2T_{2\alpha_1}(c)-1=\gamma\\
+	&\Leftrightarrow T_{2\alpha_1}(c)=\dfrac{1+\gamma}{2}\\
+	&\Leftrightarrow c = T^{-1}_{2\alpha_1}\left(\dfrac{1+\gamma}{2}\right),
+\end{align*}
+
+onde a última ezpressão é calculada computacionalmente ou por consulta em tabelas.
+
+Sabendo que $\left(\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{\frac12}(\mu-\mu_1)\right)\sim \op{t}_{2\alpha_1}$, podemos definir $a$ e $b$ via:
+
+\begin{align*}
+&~~~\;\;\op{Pr}\left[-c<\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{\frac12}(\mu-\mu_1)<c\right]=\gamma\\
+&\Leftrightarrow \op{Pr}\left[ -c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}<\mu-\mu_1<c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}\right]=\gamma\\
+&\Leftrightarrow \op{Pr}\left[ -c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}+\mu_1<\mu<c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}+\mu_1\right]=\gamma
+\end{align*}
+
+Assim, podemos fazer:
+
+\begin{align*}
+	a&=-c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}+\mu_1\\
+	b&=c\left(\dfrac{\lambda_1\alpha_1}{\beta_1}\right)^{-\frac12}+\mu_1,\\
+	\text{onde} ~c&=T^{-1}_{2\alpha_1}\left(\dfrac{1+\gamma}{2}\right)
+\end{align*}
+
+Por construção, $a<b$ e $P(a<\mu<b|\vX)=\gamma$
+
+Para elicitação dos hiperparâmetros à priori, comecemos com a distribuição marginal de $\mu$, a qual palmirinha acredita ter média $10$ e variância $4$. Podemos então igualar os momentos de tal distribuição descritos no Teorema (\ref{priorvar}), e chegar a um sistema de equações que vai resolver nossa situação pra $\mu_0$.
+
+\begin{align*}E(\mu)&=\mu_0=10\\
+Var(\mu)&=\dfrac{\beta_0}{\lambda_0(\alpha_0-1)}=4\end{align*}
+
+Já definimos então $\mu_0=10$. Para os outros parâmetros vamos trabalhar com $\tau$. A unica informação que temos sobre ele é o coeficiente de variação igual a $1/2$. O cv é uma função de $\tau$, e podemos invertê-la de forma a fazer $\tau$ como função do cv=1/2:
+
+\begin{align}\op{cv}=\dfrac{\sigma}{\mu}&\Rightarrow \op{cv}=\dfrac{1/\sqrt{\tau}}{\mu}\nonumber\\ &\Rightarrow\sqrt{\tau}=\dfrac{1}{\op{cv}\cdot\mu}\nonumber\\
+&\Rightarrow\tau=\left(\dfrac{2}{\mu}\right)^2\nonumber\end{align}
+
+Uma coisa razoável a se fazer, para não nos preocuparmos com a distribuição induzida da expressão acima, é considerar $\mu$ como um valor fixo razoável. No caso, usaremos $E(\mu)=10$, que é a informação da Palmirinha. Sendo assim, o valor esperado $E(\tau)=\dfrac{4}{100}=\dfrac{1}{25}$. Usaremos tal valor para igualar ao momento do parâmetro de precisão. Como $\tau$ tem distribuição $\op{Gamma}(\alpha_0,\beta_0)$, temos:
+
+\[\dfrac{\alpha_0}{\beta_0}=\dfrac{1}{25}\]
+
+Vamos agora fixar um valor razoável para $\alpha_0$, que apesar de ser arbitrário, não pode ser muito grande pois estpa ligado com a quantidade de informação que temos. na interpretação das pseudo-observações, $\alpha_0$ está ligado à quantidade de pseudo-experimentos ($2\alpha_0$), que no nosso caso está representando a experiência da Palmirinha, que apesar de ser vasta na área de confecção de pamonhas, vamos adotar $\alpha_0$ baixo, para dar mais flexibilidade para a posteriori. Para que os momentos de $\mu$ estajam bem definidos é preciso que $\alpha_0$ seja maior que $1$, usaremos o próximo inteiro $2$, para manter a integridade da interpretação de pseudo-experimentos.
+
+Sendo assim, $\beta_0=25\alpha_0=50$
+
+Na interpretação que demos sobre $\beta_0$ ele era metade da soma dos erros quadráticos à priori. Como temos $2*\alpha_0/2=4$ pseudo-observação, a soma quadrática mencionada nada mais é do que a variância amostral\footnote{Usamos 25, que é o a variância induzida pelo cv.} desses experimentos vezes a quantidade de experimentos, ou seja $25\cdot 4=100$, que é consistente com o que foi dito.
+
+Tendo $\alpha_0,\beta_0$, encontramos $\lambda_0$ facilmente pela expressão que já tínhamos da variância de $\mu$:
+
+\begin{align*}
+	Var(\mu)=\dfrac{\beta_0}{\lambda_0(\alpha_0-1)}=4&\Rightarrow\dfrac{50}{\lambda_0}=4\\
+	&\Rightarrow\lambda_0=50/4=12.5
+\end{align*}
+
+Tendo entao $(\mu_0,\lambda_0,\alpha_0,\beta_0)=(10,12.5,2,50)$, usando os dados de Valciclei no Teorema \ref{theo1} obtemos, $(\mu_1,\lambda_1,\alpha_1,\beta_1)\approx(9.25,22.5,7,61.92)$, o cálculo foi feito com o código abaixo escrito em Python 3.7, que além de fazer isso, calcula o intervalo de credibilidade com $\gamma=0.95$ como descrito anteriormente.
+
+Segue o script:
+
+\begin{python}
+	#Hiperparametros a priori
+	mu0 = 10
+	alpha0 = 2
+	beta0 = 25*alpha0
+	lambda0 = beta0/(4*(alpha0-1))
+	print(f"mu0 = {mu0}\nlambda0 = {lambda0}\nalpha0 = {alpha0}\nbeta0 = {beta0}\n\n")
+	
+	#Estatisticas Suficientes
+	xn = 8.307849
+	sn = 7.930452
+	n = 10
+	
+	#Hiperparametros a posteriori
+	mu1 = (lambda0*mu0+n*xn)/(lambda0+n)
+	lambda1 = lambda0+n
+	alpha1 = alpha0+n/2
+	beta1 = beta0 + sn/2 + (n*lambda0*(xn-mu0)**2)/(2*(lambda0+n))
+	print(f"mu1 = {mu1}\nlambda1={lambda1}\nalpha1 = {alpha1}\nbeta1 = {beta1}\n\n")
+	
+	#Intervalo de credibilidade
+	gamma = 0.95
+	from scipy.stats import t
+	c = t.ppf((1+gamma)/2,df=2*alpha1)
+	c2 = (lambda1*alpha1/beta1)**(-1/2)
+	a = -c*c2+mu1
+	b = c*c2+mu1
+	
+	print(f"P({a} < mu < {b}) = {gamma}")
+	
+\end{python}
+
+A saída no console referente ao intervalo de credibilidade foi:
+
+\begin{lstlisting}
+	P(7.903138300680498 < mu < 10.592727477097279) = 0.95
+	
+\end{lstlisting}
+
+Portanto, dadas as condicões sobre os hiperparâmetros à priori e as estatísticas de Valciclei, com $a\approx 7.9$ e $b\approx 10.59$, temos $P(a < \mu < b|\vX) \approx 0.95$
+
+
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}
